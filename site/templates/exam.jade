@@ -1,0 +1,30 @@
+!!!
+html
+	include head_exam
+body
+	.wrap
+		.navbar.navbar-fixed-top
+			.navbar-inner
+				.container-fluid
+					.row [[[helper_ui:flash_element()]]]
+					.row-fluid
+						.span4
+							div [[[exam:nav_left()]]]
+						.span4(align="center")
+							img(src!="[[[configs:get(customer_image)]]]")
+						.span4
+							div.pull-right [[[exam:nav_right()]]]
+		.container-fluid
+			div [[[page:layout()]]]
+		.push
+	.footer
+		.container-fluid
+			.row-fluid.muted.credit
+				.span4
+					div [[[exam:actions_left()]]]
+				.span4(align="center")
+					div [[[exam:actions_center()]]]
+				.span4
+					div.pull-right [[[exam:actions_right()]]]
+
+	script [[[script]]]

@@ -1,0 +1,40 @@
+
+## Name of the nitrogen node
+-name nitrogen_oe2@127.0.0.1
+
+## Cookie for distributed erlang
+-setcookie nitrogen_oe2
+
+## Heartbeat management; auto-restarts VM if it dies or becomes unresponsive
+## (Disabled by default..use with caution!)
+##-heart
+
+## Enable kernel poll and a few async threads
++K true
++A 5
+
+## Increase number of concurrent ports/sockets
+-env ERL_MAX_PORTS 4096
+
+## Tweak GC to run more often 
+-env ERL_FULLSWEEP_AFTER 10
+
+## If you run the sync application, this will switch it to 
+## nitrogen_mode for proper include file detection
+-sync sync_mode nitrogen
+
+## Include .beam files for site.
+-pa ./site/ebin
+
+## Include .beam files for dependencies.
+-pa ./deps/*/ebin
+
+## Run code at startup.
+-eval "application:start(nitrogen)"
+-eval "application:start(public_key)"
+-eval "application:start(ssl)"
+-eval "application:start(ibrowse)"
+-eval "application:start(couchbeam)"
+-eval "application:start(inets)"
+-eval "application:start(bcrypt)"
+-eval "application:start(sync)"

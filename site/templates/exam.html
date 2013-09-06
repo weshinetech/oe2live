@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>[[[page:title()]]]</title>
+    <link rel="stylesheet" href="/nitrogen/jquery-ui/jquery.ui.all.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="/nitrogen/lib.css">
+    <script src="/nitrogen/lib.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({root: "/nitrogen/mathjax", extensions: ["mml2jax.js"], jax: ["input/MathML","output/HTML-CSS"], menuSettings: {zoom: "Hover", zscale: "200%"}, MathMenu: {showRenderer: false}, "HTML-CSS": {availableFonts: ["TeX"], preferredFont: "TeX", imageFont: null}});</script>
+    <script type="text/javascript" src="/nitrogen/mathjax/MathJax.js"></script>
+  </head>
+</html>
+<body>
+  <div class="wrap">
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <div class="row">[[[helper_ui:flash_element()]]]</div>
+          <div class="row-fluid">
+            <div class="span4">
+              <div>[[[exam:nav_left()]]]</div>
+            </div>
+            <div align="center" class="span4"><img src="[[[configs:get(customer_image)]]]"></div>
+            <div class="span4">
+              <div class="pull-right">[[[exam:nav_right()]]]</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div>[[[page:layout()]]]</div>
+    </div>
+    <div class="push"></div>
+  </div>
+  <div class="footer">
+    <div class="container-fluid">
+      <div class="row-fluid muted credit">
+        <div class="span4">
+          <div>[[[exam:actions_left()]]]</div>
+        </div>
+        <div align="center" class="span4">
+          <div>[[[exam:actions_center()]]]</div>
+        </div>
+        <div class="span4">
+          <div class="pull-right">[[[exam:actions_right()]]]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>[[[script]]]</script>
+</body>

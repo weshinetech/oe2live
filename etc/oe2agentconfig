@@ -1,0 +1,7 @@
+{mainserver, ""}.
+{db_host, "localhost"}.
+{db_port, 5984}.
+{db_user, ""}.
+{db_password, ""}.
+{customer_image, ""}.
+{customer_text, ""}.
