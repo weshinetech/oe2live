@@ -1,7 +1,7 @@
 NITROGEN_REL ?= ~/nitrogen/rel/nitrogen
 NITROGEN = site/static/nitrogen
 
-all: setup get-deps compile js css jade
+all: get-deps compile js css jade
 
 compile:
 	@(export PATH=`pwd`/`echo erts-*/bin`:$$PATH; echo "Using Erlang in `which erl`"; ./rebar compile)
@@ -27,24 +27,7 @@ update: update-deps copy-static compile
 
 upgrade: update
 
-setup: unsetup
-	ln -s $(NITROGEN_REL)/bin bin
-	$(eval ERTS := $(shell basename $(NITROGEN_REL)/erts-*))
-	ln -s $(NITROGEN_REL)/$(ERTS) $(ERTS)
-	ln -s $(NITROGEN_REL)/lib lib
-	ln -s $(NITROGEN_REL)/rebar rebar
-	ln -s $(NITROGEN_REL)/log log
-	ln -s $(NITROGEN_REL)/releases releases
-
-unsetup:
-	rm -f bin
-	rm -f erts-*
-	rm -f lib
-	rm -f rebar
-	rm -f log
-	rm -f releases
-
-rebar_clean:
+clean:
 	@(export PATH=`pwd`/`echo erts-*/bin`:$$PATH; ./rebar clean)
 
 js:
@@ -64,5 +47,3 @@ css:
 
 jade:
 	cd $(NITROGEN)/../../templates/; rm *.html; jade --pretty *.jade
-
-clean: rebar_clean unsetup
