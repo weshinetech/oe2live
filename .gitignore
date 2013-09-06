@@ -1,0 +1,6 @@
+bin/
+erts-5.10.2/
+lib/
+log/
+rebar
+releases/
