@@ -54,29 +54,25 @@ onresult(Fields) ->
 			oeusertimeleftseconds,
 			oeuserscore, 
 			oeuserexamstate
-		]),
-		qnasummary(fields:find(Fields, oeuserqna))
+		], qnarows(fields:find(Fields, oeuserqna)))
 	],
 	wf:update(result, Elements).
 
-qnasummary(#field {uivalue=List}) ->
+qnarows(#field {uivalue=List}) ->
 	T = length(List),
 	U = length(lists:filter(fun({_, A}) -> A == "0" end, List)),
 	A = T - U,
 	[
-		#hr {class="myseparator"},
-		#table {class="table table-bordered table-hover", rows=[
-			#tablerow {cells=[
-				#tablecell {body=#span {text=locale:get(msg_total_questions)}},
-				#tablecell {body=#span {text=T}}
-			]},
-			#tablerow {cells=[
-				#tablecell {body=#span {text=locale:get(msg_attempted_questions)}},
-				#tablecell {body=#span {text=A}}
-			]},
-			#tablerow {cells=[
-				#tablecell {body=#span {text=locale:get(msg_unattempted_questions)}},
-				#tablecell {body=#span {text=U}}
-			]}
+		#tablerow {cells=[
+			#tablecell {body=#span {text=locale:get(msg_total_questions)}},
+			#tablecell {body=#span {text=T}}
+		]},
+		#tablerow {cells=[
+			#tablecell {body=#span {text=locale:get(msg_attempted_questions)}},
+			#tablecell {body=#span {text=A}}
+		]},
+		#tablerow {cells=[
+			#tablecell {body=#span {text=locale:get(msg_unattempted_questions)}},
+			#tablecell {body=#span {text=U}}
 		]}
 	].

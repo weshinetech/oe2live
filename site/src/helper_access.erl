@@ -25,16 +25,16 @@ allowed(M, Mode) ->
 	lists:member(Role, Allowed).
 
 access(test, search) -> [admin];
-access(test, view) -> [admin, staff];
-access(test, edit) -> [admin];
-access(test, create) -> [admin];
+access(test, view) -> [admin, oeadmin, oestaff];
+access(test, edit) -> [admin, oeadmin];
+access(test, create) -> [admin, oeadmin];
 
 access(exam, _) -> [candidate];
 
-access(index, _) -> [admin, staff];
-access(tokens, _) -> [admin, staff];
-access(candidate_status, _) -> [admin, staff];
-access(candidate_search, _) -> [admin, staff];
-access(report_generate, _) -> [admin, staff];
+access(index, _) -> [admin, oeadmin, oestaff];
+access(tokens, _) -> [admin, oeadmin, oestaff];
+access(candidate_status, _) -> [admin, oeadmin, oestaff];
+access(candidate_search, _) -> [admin, oeadmin, oestaff];
+access(report_generate, _) -> [admin, oeadmin, oestaff];
 
 access(_, _) -> [].

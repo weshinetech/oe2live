@@ -46,6 +46,9 @@ is_valid_session() ->
 is_valid_access(Module) ->
 	helper_access:get(Module).
 
+oecentercode() ->
+	fields:finduival(userfields(), oecentercode).
+
 % request ip
 ip() ->
 	case wf:peer_ip() of

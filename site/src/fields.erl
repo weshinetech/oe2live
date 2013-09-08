@@ -25,6 +25,7 @@ get(mobile = I) -> F = textbox(I), F#field {validators=[mobile]};
 get(landline = I) -> F = textbox(I), F#field {validators=[mobile]};
 get(email = I) -> F = textbox(I), F#field {validators=[email]};
 get(testduration = I) -> F = textbox(I), F#field {validators=[integer]};
+get(oecentercode = I) -> textbox(I);
 
 % textarea
 get(testdescription = I) -> textarea(I);
@@ -468,4 +469,10 @@ delete(Fields, Id) ->
 	case filter(Fields, Id) of
 		[Field] -> lists:delete(Field, Fields);
 		_ -> Fields
+	end.
+
+finduival(Fields, Id) ->
+	case find(Fields, Id) of
+		undefined -> [];
+		F -> F#field.uivalue
 	end.

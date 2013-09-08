@@ -171,6 +171,13 @@ cell(L, Field) ->
 filler_cells(N) ->
 	lists:map(fun(_) -> #tablecell {body=""} end, lists:seq(1, N)).
 
+table_fields(Fields, Ids, Rows) ->
+	#table {
+		class="table table-bordered table-hover",
+		rows=lists:map(fun(I) -> 
+			#tablerow {cells=table_fields_row(Fields, I)}
+		end, Ids) ++ Rows
+	}.
 
 table_fields(Fields, Ids) ->
 	#table {

@@ -51,8 +51,7 @@ getusers_by_state(TestId) ->
 	end, {[], [], []}, Users),
 	{Y, A, C}.
 
-compute_scores(TestId) ->
-	{_, _, Users} = getusers_by_state(TestId),
+compute_scores(TestId, Users) ->
 	Dict = questions:getdict(TestId),
 	NewUsers = lists:map(fun(U) -> compute_score(Dict, U) end, Users),
 	?MODULE:updateall(?DB_USERS ++ TestId, NewUsers).

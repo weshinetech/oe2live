@@ -65,7 +65,7 @@ summary(Y, A, C) ->
 				#tablecell {body=#span {text=length(C)}}
 			]},
 			#tablerow {class="", cells=[
-				#tablecell {body=#span {text=locale:get(yet_to_start)}},
+				#tablecell {body=#span {text=locale:get(yettostart)}},
 				#tablecell {body=#span {text=length(Y)}}
 			]}
 		]
