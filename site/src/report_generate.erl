@@ -27,6 +27,8 @@ layout(report_generate) ->
 			#br{},
 			#panel {body=fullname()}
 		]}),
+		layout:g(10, #panel {id=sync_status, body=[]}),
+		layout:g(10, #panel {id=download, body=[]}),
 		layout:g(10, #panel {id=result, body=[]})
 	].
 
@@ -40,6 +42,10 @@ eids() -> [
 
 event({timer_flash, _} = E) ->
 	helper_ui:event(E);
+
+event({download, FTest}) ->
+	Url = "/download?type=results&testid=" ++ FTest#field.uivalue,
+	helper:redirect(Url);
 
 event(show_create) ->
 	[FTest] = fields:uivalue(helper_ui:fields(?MODULE)),
@@ -81,10 +87,13 @@ checksync_1(FTest, {Y, A, C}, Res) ->
 		case (helper:s2i(Ys) == length(Y)) and (helper:s2i(As) == length(A)) and (helper:s2i(Cs) == length(C)) of
 			true ->
 				helper:httpget(url_completed(FTest)),
-				compute_scores(FTest, C);
+				wf:update(sync_status, #panel {body=[]});
 			false ->
-				helper_ui:flash(error, locale:get(msg_generate_report_error_data_sync))
-		end
+				wf:update(sync_status, #panel {class="well label-important",
+					body=locale:get(msg_generate_report_error_data_sync)})
+		end,
+		show_download(FTest),
+		compute_scores(FTest, C)
 	catch
 		_:_ -> helper_ui:flash(error, locale:get(msg_generate_report_error_data_sync_ex))
 	end.
@@ -102,3 +111,6 @@ url_state(FTest) ->
 
 url_completed(FTest) ->
 	configs:get(mainserver) ++ "/oetest_completed?oetestid=" ++ FTest#field.uivalue ++ "&oecentercode=" ++ myauth:oecentercode().
+
+show_download(FTest) ->
+	wf:update(download, #button {class="btn btn-primary", postback={download, FTest}, text=locale:get(msg_download)}).

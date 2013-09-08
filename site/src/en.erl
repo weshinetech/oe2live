@@ -127,8 +127,9 @@ get(msg_generate_report_declare_over) -> "(A) Examination at my center is comple
 get(msg_generate_report_declare_sync) -> "(B) Examination data at my center has been copied/synced to main server completely.";
 get(msg_generate_report_error_active) -> "ERROR. Some candidates are still active";
 get(msg_generate_report_error_request_failed) -> "ERROR: Failed to connect to main server";
-get(msg_generate_report_error_data_sync) -> "ERROR: Data is not in sync with main server";
+get(msg_generate_report_error_data_sync) -> "Data is not in sync with main server. Please contact exam co-ordinator immediately.";
 get(msg_generate_report_error_data_sync_ex) -> "ERROR: Could not parse main server response";
+get(msg_download) -> "Download";
 
 get(admin_link_home) -> "Home";
 get(admin_link_tokens) -> "Tokens";

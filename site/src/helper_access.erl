@@ -37,4 +37,6 @@ access(candidate_status, _) -> [admin, oeadmin, oestaff];
 access(candidate_search, _) -> [admin, oeadmin, oestaff];
 access(report_generate, _) -> [admin, oeadmin, oestaff];
 
+access(download, _) -> [admin, oeadmin, oestaff];
+
 access(_, _) -> [].

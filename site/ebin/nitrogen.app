@@ -6,7 +6,7 @@
               {mod,{nitrogen_app,[]}},
               {env,[]},
               {modules,[cache,candidate_search,candidate_status,configs,db,
-                        dh_date,en,events,exam,export,fields,helper,
+                        dh_date,download,en,events,exam,export,fields,helper,
                         helper_access,helper_admin,helper_api,helper_options,
                         helper_ui,index,instructions,layout,locale,login,
                         my_dynamic_route_handler,my_images,myauth,mylist,
