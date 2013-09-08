@@ -40,17 +40,13 @@ getusers(TestId) ->
 	Users.
 
 getusers_by_state(TestId) ->
-	TestFs = oe2tests:get(TestId),
 	Users = oeusers:getusers(TestId),
-	Duration = fields:find(TestFs, testduration),
-	DurationInt = helper:s2i(Duration#field.uivalue) * 60,
 	{Y, A, C} = lists:foldl(fun(U, {AccY, AccA, AccC}) ->
-		TimeLeft = fields:find(U, oeusertimeleftseconds),
-		TimeInt = helper:s2i(TimeLeft#field.uivalue),
-		if
-			TimeInt == 0 -> {AccY, AccA, AccC ++ [U]};
-			TimeInt == DurationInt -> {AccY ++ [U], AccA, AccC};
-			true -> {AccY, AccA ++ [U], AccC}
+		#field {uivalue=State} = fields:find(U, oeuserexamstate),
+		case State of
+			?COMPLETED -> {AccY, AccA, AccC ++ [U]};
+			?YETTOSTART -> {AccY ++ [U], AccA, AccC};
+			?ACTIVE -> {AccY, AccA ++ [U], AccC}
 		end
 	end, {[], [], []}, Users),
 	{Y, A, C}.

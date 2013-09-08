@@ -34,6 +34,7 @@ access(exam, _) -> [candidate];
 access(index, _) -> [admin, staff];
 access(tokens, _) -> [admin, staff];
 access(candidate_status, _) -> [admin, staff];
+access(candidate_search, _) -> [admin, staff];
 access(report_generate, _) -> [admin, staff];
 
 access(_, _) -> [].

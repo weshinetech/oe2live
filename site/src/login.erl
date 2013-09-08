@@ -58,13 +58,13 @@ validateUser(Fs, Password, TestId) ->
 	validatePassword(Fs, fields:find(Fs, oeusertoken), Password, TestId).
 
 validatePassword(Fs, #field {uivalue=Password}, Password, TestId) ->
-	validateTestState(Fs, fields:find(Fs, oeusertimeleftseconds), TestId);
+	validateTestState(Fs, fields:find(Fs, oeuserexamstate), TestId);
 validatePassword(_, _, _, _) ->
 	onloginfailed().
 
 validateTestState(_, undefined, _) ->
 	onloginfailed();
-validateTestState(_, #field {uivalue="0"}, _) ->
+validateTestState(_, #field {uivalue=?COMPLETED}, _) ->
 	onloginfailed(login_failed_expired);
 validateTestState(Fs, _, TestId) ->
 	FUser = fields:find(Fs, '_id'),

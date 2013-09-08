@@ -60,6 +60,12 @@ options(year) -> [
 	'2011', '2012', '2013'
 ];
 
+options(oeuserexamstate) -> [
+	yettostart,
+	active,
+	completed
+];
+
 options(Other) ->
 	helper:print(Other),
 	throw(optionlist_not_found).

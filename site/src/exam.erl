@@ -19,6 +19,7 @@ heading() ->
 	locale:get(exam_heading).
 
 layout() ->
+	on_initexam(initexam()),
 	myauth:pageloaded(?MODULE, true),
 	helper:state(questionindex, 1),
 	Body = #panel {id=exam_page, body=layout_question()},
@@ -29,8 +30,7 @@ layout() ->
 % TIMERS
 %---------------------------------------------------------------------------------------------------
 loop_timer(TimeLeft) when TimeLeft < 1 ->
-	save_timer(0),
-	helper:redirect("/login");
+	endexam(0);
 loop_timer(TimeLeft) ->
 	Interval = 60,
 	save_timer(TimeLeft),
@@ -275,8 +275,7 @@ event({submit_test, no}) ->
 	updatequestion();
 
 event({submit_test, yes}) ->
-	save_timer(0),
-	helper:redirect("/login");
+	endexam();
 
 event(Event) ->
 	helper:print(Event).
@@ -284,6 +283,53 @@ event(Event) ->
 %---------------------------------------------------------------------------------------------------
 % HELPERS
 %---------------------------------------------------------------------------------------------------
+initexam() ->
+	initexam(getuservalue(oeuserexamstate)).
+
+initexam(?YETTOSTART) ->
+	Fs = myauth:userfields(),
+	F1 = fields:find(Fs, oeuserexamstate),
+	F2 = fields:find(Fs, oeuserstarttime),
+	F3 = fields:find(Fs, oeuserlogintimes),
+	Fs1 = fields:delete(Fs, oeuserexamstate),
+	Fs2 = fields:delete(Fs1, oeuserstarttime),
+	Fs3 = fields:delete(Fs2, oeuserlogintimes),
+	NewFs = Fs3 ++ [
+		F1#field {uivalue="active"}, 
+		F2#field {uivalue=helper:i2s(helper:epochtime())},
+		F3#field {uivalue=increment_logintimes(F3)}
+	],
+	save_user(NewFs);
+initexam(?ACTIVE) ->
+	Fs = myauth:userfields(),
+	Fl = fields:find(Fs, oeuserlogintimes),
+	NewFs = fields:delete(Fs, oeuserlogintimes) ++ [Fl#field {uivalue=increment_logintimes(Fl)}],
+	save_user(NewFs);
+initexam(_) ->
+	error.
+
+endexam() ->
+	endexam(helper:s2i(getuservalue(oeusertimeleftseconds))).
+
+endexam(TimeLeft) ->
+	Fs = myauth:userfields(),
+	F1 = fields:find(Fs, oeuserexamstate),
+	F2 = fields:find(Fs, oeuserendtime),
+	F3 = fields:find(Fs, oeusertimeleftseconds),
+	Fs1 = fields:delete(Fs, oeuserexamstate),
+	Fs2 = fields:delete(Fs1, oeuserendtime),
+	Fs3 = fields:delete(Fs2, oeusertimeleftseconds),
+	NewFs = Fs3 ++ [
+		F1#field {uivalue="completed"}, 
+		F2#field {uivalue=helper:i2s(helper:epochtime())},
+		F3#field {uivalue=helper:i2s(TimeLeft)}
+	],
+	save_user(NewFs),
+	helper:redirect("/login").
+
+increment_logintimes(#field {uivalue=Times}) ->
+	helper:i2s(helper:s2i(Times) + 1).
+
 getuservalue(Type) ->
 	Fs = myauth:userfields(),
 	F = fields:find(Fs, Type),
@@ -385,7 +431,7 @@ save_reported() ->
 	save_user(NewFs).
 
 save_timer(TimeLeftSeconds) when TimeLeftSeconds < 0 ->
-	save_timer(0);
+	endexam(0);
 save_timer(TimeLeftSeconds) ->
 	Fs = myauth:userfields(),
 	TimeLeft = fields:find(Fs, oeusertimeleftseconds),
@@ -430,6 +476,11 @@ on_save_timer({ok, Doc}) ->
 	myauth:userfields(helper_api:doc2fields({ok, Doc}));
 on_save_timer(_) ->
 	helper_ui:flash(exam_timer_save_failed).
+
+on_initexam({ok, Doc}) ->
+	myauth:userfields(helper_api:doc2fields({ok, Doc}));
+on_initexam(_) ->
+	helper:redirect("/login").
 
 %---------------------------------------------------------------------------------------------------
 % END

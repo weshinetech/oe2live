@@ -141,3 +141,10 @@ ifundefempty(Other) -> Other.
 uid() ->
 	{A, B, C} = erlang:now(),
 	l2a(lists:flatten(io_lib:format("~p-~p-~p", [A, B, C]))).
+
+epochtime() ->
+	calendar:datetime_to_gregorian_seconds(calendar:now_to_universal_time(now()))-719528*24*3600.
+
+epochtimetostring(Seconds) -> 
+	{{Year, Month, Day}, {Hour, Min, Sec}} = calendar:gregorian_seconds_to_datetime(Seconds + 719528*24*3600 + 5*3600 + 1800),
+	lists:flatten(io_lib:fwrite("~4B/~B/~B ~2B:~2.10.0B:~2.10.0B",	[Year, Month, Day, Hour, Min, Sec])).

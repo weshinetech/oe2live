@@ -8,6 +8,8 @@
 -define(EXPORT, "export").
 -define(DB_USERS, "u_").
 -define(DB_QUESTIONS, "q_").
+-define(YETTOSTART, "yettostart").
+-define(COMPLETED, "completed").
 
 -record(field, {
 	id,

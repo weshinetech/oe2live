@@ -11,6 +11,8 @@ get(candidate_status_title) -> "Candidate Status";
 get(candidate_status_heading) -> "Candidate Status";
 get(report_generate_title) -> "Generate Report";
 get(report_generate_heading) -> "Generate Report";
+get(instructions_title) -> "Instructions";
+get(instructions_heading) -> "Instructions";
 
 get(create) -> "Create";
 get(edit) -> "Edit";
@@ -44,6 +46,9 @@ get(oeuserlogintimes) -> "# of logins";
 get(oeusertoken) -> "Token";
 get(oeusertimeleftseconds) -> "Time (secs)";
 get(oeuserscore) -> "Score";
+get(oeuserstarttime) -> "Start Time";
+get(oeuserendtime) -> "End Time";
+get(oeuserexamstate) -> "Exam State";
 
 get(oe2test_title) -> "Test";
 get(oe2test_heading) -> "Test";
@@ -114,6 +119,9 @@ get(msg_unquthorised) -> "Unauthorised access to module.";
 get(msg_candidate_not_found) -> "Not found.";
 get(msg_online_exam_system) -> "Online Examination System";
 get(msg_index_welcome) -> "Welcome";
+get(msg_total_questions) -> "Total Questions";
+get(msg_attempted_questions) -> "Attempted Questions";
+get(msg_unattempted_questions) -> "Un-attempted Questions";
 
 get(admin_link_home) -> "Home";
 get(admin_link_tokens) -> "Tokens";

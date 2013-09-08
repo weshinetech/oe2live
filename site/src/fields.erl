@@ -88,10 +88,10 @@ get(oeuserqna = I) -> mylist2:get(I);
 get(oeusermarkers = I) -> mylist2:get(I);
 get(oeuserreported = I) -> mylist2:get(I);
 get(oeusertoken = I) -> textbox(I);
-get(oeuserquestionpaper = I) -> textbox(I);
 get(oeuserstarttime = I) -> textbox(I);
 get(oeuserendtime = I) -> textbox(I);
 get(oeusertimeleftseconds = I) -> textbox(I);
+get(oeuserexamstate = I) -> dropdown(I);
 get(oeuserscore = I) -> textbox(I);
 
 % other

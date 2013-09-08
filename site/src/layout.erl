@@ -186,13 +186,10 @@ table_fields_row(Fields, I) ->
 
 table_fields_row_1(undefined) -> [];
 table_fields_row_1(F) ->
+	{L, FE} = getfield(?VIEW, #jevent{}, F),
 	#tablerow { cells=[
-		#tablecell {body=[
-			#span {text=F#field.label}
-		]},
-		#tablecell {body=[
-			#span {text=F#field.uivalue}
-		]}
+		#tablecell {body=#span {text=L}},
+		#tablecell {body=FE}
 	]}.
 
 table_values([], _) ->

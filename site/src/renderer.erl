@@ -18,6 +18,10 @@ wire(true, Id, Action, Validators) ->
 get(textbox) ->
 	fun(Md, Ac, #field {id=I, uivalue=V, postback=P, label=L, validators=Va}) ->
 		{Validate, FE} = if 
+			Md == ?VIEW, I == oeuserstarttime ->
+				{false, #span {text=helper:epochtimetostring(helper:s2i(V))}};
+			Md == ?VIEW, I == oeuserendtime ->
+				{false, #span {text=helper:epochtimetostring(helper:s2i(V))}};
 			Md == ?VIEW ->
 				{false, #span {text=V}};
 			true ->
