@@ -126,10 +126,16 @@ get(msg_generate_report_declare) -> "BY GENERATING RESULTS, I HEREBY DECLARE THA
 get(msg_generate_report_declare_over) -> "(A) Examination at my center is completely over. Hereafter candidates will not be allowed to appear for the exam.";
 get(msg_generate_report_declare_sync) -> "(B) Examination data at my center has been copied/synced to main server completely.";
 get(msg_generate_report_error_active) -> "ERROR. Some candidates are still active";
-get(msg_generate_report_error_request_failed) -> "ERROR: Failed to connect to main server";
+get(msg_generate_report_error_request_failed) -> "Failed to connect to main server";
 get(msg_generate_report_error_data_sync) -> "Data is not in sync with main server. Please contact exam co-ordinator immediately.";
-get(msg_generate_report_error_data_sync_ex) -> "ERROR: Could not parse main server response";
+get(msg_generate_report_error_data_sync_ex) -> "Could not parse main server response";
 get(msg_download) -> "Download";
+get(msg_software_update_alert) -> "DO NOT UPDATE SOFTWARE WHILE CANDIDATES ARE TAKING EXAM";
+get(msg_software_update_myversion) -> "My version: ";
+get(msg_software_update_repoversion) -> "Latest version: ";
+get(msg_checking) -> "Checking ...";
+get(msg_update_software) -> "Update software";
+get(msg_unknown) -> "Unknown";
 
 get(admin_link_home) -> "Home";
 get(admin_link_tokens) -> "Tokens";
@@ -138,6 +144,7 @@ get(admin_link_candidate_search) -> "Candidate Info";
 get(admin_link_candidate_summary) -> "Status Summary";
 get(admin_link_candidate_status) -> "Candidate List";
 get(admin_link_report_generate) -> "Results";
+get(admin_link_software_update) -> "Software Update";
 get(admin_link_logout) -> "Logout";
 
 get(Other) ->

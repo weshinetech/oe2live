@@ -23,6 +23,8 @@ links() ->
 		#br{},
 		#link {class="mylabel", url="/report_generate", text=locale:get(admin_link_report_generate)},
 		#br{},
+		#link {class="mylabel", url="/software_update", text=locale:get(admin_link_software_update)},
+		#br{},
 		#link {class="mylabel", url="/profile_login", text=locale:get(admin_link_logout)}
 	]}.
 

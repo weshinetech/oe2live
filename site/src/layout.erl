@@ -165,7 +165,9 @@ row_cells(L, Fields) ->
 cell(L, Field) ->
 	case fields:find(L, Field) of
 		undefined -> #tablecell {body=#span {text=""}};
-		F -> #tablecell {body=#span {text=F#field.uivalue}}
+		F -> 
+			{_, FE} = getfield(?VIEW, #jevent{}, F),
+			#tablecell {body=FE}
 	end.
 
 filler_cells(N) ->

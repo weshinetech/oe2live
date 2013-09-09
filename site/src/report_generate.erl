@@ -76,31 +76,32 @@ checkactive(FTest, Users) ->
 
 checksync(FTest, {Y, A, C}) ->
 	Url = url_state(FTest),
-	Res = helper:httpget(Url),
-	checksync_1(FTest, {Y, A, C}, Res).
+	case helper:httpget(Url) of
+		{error, _} ->
+			updatesyncstatus(locale:get(msg_generate_report_error_request_failed));
+		Res ->
+			showsyncstatus(FTest, {Y, A, C}, Res)
+	end,
+	oeusers:compute_scores(FTest#field.uivalue, C),
+	show_download(FTest),
+	showresults(FTest).
 
-checksync_1(_, {_, _, _}, {error, _}) ->
-	helper_ui:flash(error, locale:get(msg_generate_report_error_request_failed));
-checksync_1(FTest, {Y, A, C}, Res) ->
+showsyncstatus(FTest, {Y, A, C}, Res) ->
 	try
 		[Ys, As, Cs] = string:tokens(Res, ","),
 		case (helper:s2i(Ys) == length(Y)) and (helper:s2i(As) == length(A)) and (helper:s2i(Cs) == length(C)) of
 			true ->
 				helper:httpget(url_completed(FTest)),
-				wf:update(sync_status, #panel {body=[]});
+				wf:update(sync_status, []);
 			false ->
-				wf:update(sync_status, #panel {class="well label-important",
-					body=locale:get(msg_generate_report_error_data_sync)})
-		end,
-		show_download(FTest),
-		compute_scores(FTest, C)
+				updatesyncstatus(locale:get(msg_generate_report_error_data_sync))
+		end
 	catch
-		_:_ -> helper_ui:flash(error, locale:get(msg_generate_report_error_data_sync_ex))
+		_:_ -> updatesyncstatus(locale:get(msg_generate_report_error_data_sync_ex))
 	end.
 
-compute_scores(FTest, C) ->
-	oeusers:compute_scores(FTest#field.uivalue, C),
-	showresults(FTest).
+updatesyncstatus(Message) ->
+	wf:update(sync_status, #panel {class="well label-important", body=Message}).
 
 showresults(FTest) ->
 	{Y, A, C} = oeusers:getusers_by_state(FTest#field.uivalue),

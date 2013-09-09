@@ -43,7 +43,7 @@ event(Event) ->
 	helper:print(Event).
 
 status(Y, A, C) ->
-	Ids = [oeusercentercode, oeuserseatnumber, oeuserfullname, oeusertimeleftseconds],
+	Ids = [oeusercentercode, oeuserseatnumber, oeuserfullname, oeusertimeleftseconds, oeuserexamstate],
 	#table {
 		class="table table-bordered table-hover",
 		rows=helper_admin:layout_oeuser_header(Ids) ++
