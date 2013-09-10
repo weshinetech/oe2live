@@ -136,7 +136,7 @@ get(password_bcrypt, Id, Label) ->
 		type=password_bcrypt,
 		label=Label,
 		renderer=renderer:get(password_bcrypt),
-		validators=[required, length5, noallspaces]
+		validators=[required, length4, noallspaces]
 	};
 get(textbox, Id, Label) ->
 	#field {

@@ -23,6 +23,14 @@ get(integer) ->
 		end
 	end;
 
+get(length4) ->
+	fun(_, V) ->
+		case V of
+			undefined -> false;
+			_ -> length(V) > 3
+		end
+	end;
+
 get(length5) ->
 	fun(_, V) ->
 		case V of
