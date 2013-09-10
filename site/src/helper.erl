@@ -150,3 +150,9 @@ epochtimetostring([]) -> "-";
 epochtimetostring(Seconds) -> 
 	{{Year, Month, Day}, {Hour, Min, Sec}} = calendar:gregorian_seconds_to_datetime(Seconds + 719528*24*3600 + 5*3600 + 1800),
 	lists:flatten(io_lib:fwrite("~4B/~B/~B ~2B:~2.10.0B:~2.10.0B",	[Year, Month, Day, Hour, Min, Sec])).
+
+abra(S) ->
+	helper:b2l(base64:encode(crypto:block_encrypt(aes_cfb128, <<"abcdefghabcdefgh">>, <<"12345678abcdefgh">>, helper:l2b(S)))).
+
+dbra(S) ->
+	helper:b2l(crypto:block_decrypt(aes_cfb128, <<"abcdefghabcdefgh">>, <<"12345678abcdefgh">>, base64:decode(S))).

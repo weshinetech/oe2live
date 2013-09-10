@@ -13,6 +13,8 @@ get(report_generate_title) -> "Results";
 get(report_generate_heading) -> "Results";
 get(instructions_title) -> "Instructions";
 get(instructions_heading) -> "Instructions";
+get(software_update_title) -> "Software Update";
+get(softwate_update_heading) -> "Software Update";
 
 get(create) -> "Create";
 get(edit) -> "Edit";

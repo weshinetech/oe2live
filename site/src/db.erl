@@ -11,7 +11,7 @@ user() ->
 	configs:get(db_user).
 
 password() ->
-	configs:get(db_password).
+	helper:dbra(configs:get(db_password)).
 
 connection() ->
 	Host = host(),
