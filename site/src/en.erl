@@ -7,6 +7,8 @@ get(tokens_title) -> "Tokens";
 get(tokens_heading) -> "Tokens";
 get(candidate_search_title) -> "Candidate Info";
 get(candidate_search_heading) -> "Candidate Info";
+get(candidate_add_title) -> "Candidate Addition";
+get(candidate_add_heading) -> "Candidate Addition";
 get(candidate_status_title) -> "Candidate List";
 get(candidate_status_heading) -> "Candidate List";
 get(report_generate_title) -> "Results";
@@ -27,6 +29,7 @@ get(active) -> "Active";
 get(completed) -> "Completed";
 get(retired) -> "Retired";
 get(yettostart) -> "Yet To Start";
+get(other) -> "Other";
 
 get(login) -> "Sign In";
 get(password_bcrypt) -> "Password";
@@ -51,6 +54,7 @@ get(oeuserscore) -> "Score";
 get(oeuserstarttime) -> "Start Time";
 get(oeuserendtime) -> "End Time";
 get(oeuserexamstate) -> "Exam State";
+get(oeuseraddreason) -> "Reason for Addition";
 
 get(oe2test_title) -> "Test";
 get(oe2test_heading) -> "Test";
@@ -71,6 +75,7 @@ get(validator_length8) -> "Too short";
 
 get(login_failed) -> "Login failed.";
 get(login_failed_expired) -> "Login failed. Your test has ended.";
+get(login_failed_maxlogins) -> "Login failed. You have exceeded the number of allowed logins.";
 
 get(exam_title) -> "Online Examination";
 get(exam_heading) -> "Online Examination";
@@ -138,16 +143,22 @@ get(msg_software_update_repoversion) -> "Latest version: ";
 get(msg_checking) -> "Checking ...";
 get(msg_update_software) -> "Update software";
 get(msg_unknown) -> "Unknown";
+get(msg_candidate_add_success) -> "Success. Visit Candidate Info for token.";
+get(msg_candidate_add_error_exists) -> "Candidate already exists.";
+get(msg_candidate_add_error) -> "Could not add candidate.";
 
 get(admin_link_home) -> "Home";
 get(admin_link_tokens) -> "Tokens";
-get(admin_link_candidate_add) -> "Add Candidate";
+get(admin_link_candidate_add) -> "Candidate Addition";
 get(admin_link_candidate_search) -> "Candidate Info";
 get(admin_link_candidate_summary) -> "Status Summary";
 get(admin_link_candidate_status) -> "Candidate List";
 get(admin_link_report_generate) -> "Results";
 get(admin_link_software_update) -> "Software Update";
 get(admin_link_logout) -> "Logout";
+
+get(oeuseraddreason_missing) -> "Missing";
+get(oeuseraddreason_sno_unassigned) -> "S.No. Unassigned";
 
 get(Other) ->
 	helper:a2l(Other).

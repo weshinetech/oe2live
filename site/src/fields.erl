@@ -33,6 +33,7 @@ get(testdescription = I) -> textarea(I);
 % dropdown
 get(teststatus = I) -> dropdown(I);
 get(testsactive = I) -> dropdown(I);
+get(testmaxlogins = I) -> F = textbox(I), F#field {validators=[integer]};
 get(blood_group = I) -> dropdown(I);
 get(address_country = I) -> dropdown(I);
 get(gender = I) -> dropdown(I);
@@ -94,6 +95,7 @@ get(oeuserendtime = I) -> textbox(I);
 get(oeusertimeleftseconds = I) -> textbox(I);
 get(oeuserexamstate = I) -> dropdown(I);
 get(oeuserscore = I) -> textbox(I);
+get(oeuseraddreason = I) -> dropdown(I);
 
 % other
 get(_) -> undefined.

@@ -66,6 +66,12 @@ options(oeuserexamstate) -> [
 	completed
 ];
 
+options(oeuseraddreason) -> [
+	oeuseraddreason_missing,
+	oeuseraddreason_sno_unassigned,
+	other
+];
+
 options(Other) ->
 	helper:print(Other),
 	throw(optionlist_not_found).

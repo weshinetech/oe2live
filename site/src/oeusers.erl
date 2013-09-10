@@ -81,3 +81,44 @@ getscore(Fields, A) ->
 		true -> Marks#field.uivalue;
 		false -> "0"
 	end.
+
+candidate_addition([Test, #field {uivalue=SN},	#field {uivalue=FN}, #field {uivalue=AN}, #field {uivalue=RN}]) ->
+
+	TestId = Test#field.uivalue,
+	case ?MODULE:get(?DB_USERS ++ TestId, SN) of
+		{error, _} ->
+			TestFs = oe2tests:get(Test#field.uivalue),
+			User = [
+				getfield({oeuserid, SN}),
+				getfield({oeusercentercode, myauth:oecentercode()}),
+				getfield({oeuserseatnumber, SN}),
+				getfield({oeuserfullname, FN}),
+				getfield({oeuseraddname, AN}),
+				getfield({oeuserlogintimes, "0"}),
+				getfield({oeuserqna, getpaper(TestId)}),
+				getfield({oeusermarkers, []}),
+				getfield({oeuserreported, []}),
+				getfield({oeusertoken, helper:random_string(4)}),
+				getfield({oeusertimeleftseconds, helper:i2s(helper:s2i(fields:finduival(TestFs, testduration)) * 60)}),
+				getfield({oeuserstarttime, ""}),
+				getfield({oeuserendtime, ""}),
+				getfield({oeuserexamstate, "yettostart"}),
+				getfield({oeuseraddreason, RN})
+			],
+			?MODULE:create(?DB_USERS ++ TestId, User);
+		_ ->
+			{error, exists}
+	end.
+
+getfield({Type, V}) ->
+	F = fields:get(Type),
+	F#field {uivalue=V};
+getfield(Other) ->
+	throw (Other).
+
+getpaper(TestId) ->
+	Users = getusers(TestId),
+	random:seed(erlang:now()),
+	N = random:uniform(length(Users)),
+	User = lists:nth(N, Users),
+	fields:finduival(User, oeuserqna).

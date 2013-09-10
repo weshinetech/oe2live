@@ -67,9 +67,20 @@ validateTestState(_, undefined, _) ->
 validateTestState(_, #field {uivalue=?COMPLETED}, _) ->
 	onloginfailed(login_failed_expired);
 validateTestState(Fs, _, TestId) ->
-	FUser = fields:find(Fs, '_id'),
-	myauth:username(FUser#field.uivalue),
-	myauth:userfields(Fs),
-	myauth:testfields(oe2tests:get(TestId)),
-	myauth:role("candidate"),
-	helper:redirect("/exam").
+	validateLoginTimes(Fs, TestId).
+
+validateLoginTimes(Fs, TestId) ->
+	TestFs = oe2tests:get(TestId),
+	MaxLogins = fields:finduival(TestFs, testmaxlogins),
+	UserLogins = fields:finduival(Fs, oeuserlogintimes),
+	case helper:s2i(UserLogins) >= helper:s2i(MaxLogins) of
+		true ->
+			onloginfailed(login_failed_maxlogins);
+		false ->
+			FUser = fields:find(Fs, '_id'),
+			myauth:username(FUser#field.uivalue),
+			myauth:userfields(Fs),
+			myauth:testfields(oe2tests:get(TestId)),
+			myauth:role("candidate"),
+			helper:redirect("/exam")
+	end.

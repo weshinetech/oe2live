@@ -17,6 +17,8 @@ links() ->
 		#br{},
 		#link {class="mylabel", url="/tokens", text=locale:get(admin_link_tokens)},
 		#br{},
+		#link {class="mylabel", url="/candidate_add", text=locale:get(admin_link_candidate_add)},
+		#br{},
 		#link {class="mylabel", url="/candidate_search", text=locale:get(admin_link_candidate_search)},
 		#br{},
 		#link {class="mylabel", url="/candidate_status", text=locale:get(admin_link_candidate_status)},

@@ -93,6 +93,7 @@ print(X) ->
 id(undefined, BaseId) -> BaseId;
 id(ParentId, BaseId) -> helper:l2a(helper:a2l(ParentId) ++ helper:a2l(BaseId)).
 
+id(#field {id=oeuserid}) -> '_id';
 id(#field {type=primarykey}) -> '_id';
 id(#field {baseid=BId}) when BId /= undefined -> BId;
 id(#field {id=I}) -> I.
@@ -129,7 +130,7 @@ listupdate(K, V, L) ->
 	end.
 
 random_string(Len) ->
-	Chrs = list_to_tuple("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"),
+	Chrs = list_to_tuple("ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz23456789"),
 	ChrsSize = size(Chrs),
 	random:seed(erlang:now()),
 	F = fun(_, R) -> [element(random:uniform(ChrsSize), Chrs) | R] end,
