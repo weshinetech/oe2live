@@ -39,5 +39,6 @@ access(candidate_add, _) -> [admin, oeadmin, oestaff];
 access(report_generate, _) -> [admin, oeadmin, oestaff];
 access(software_update, _) -> [admin, oeadmin, oestaff];
 access(download, _) -> [admin, oeadmin, oestaff];
+access(session_duplicate, _) -> [admin, oeadmin, candidate];
 
 access(_, _) -> [].

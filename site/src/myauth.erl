@@ -66,6 +66,8 @@ main(Module) ->
 % verify session
 handle_session(_, instructions) ->
 	load_template(instructions);
+handle_session(_, session_duplicate) ->
+	load_template(session_duplicate);
 handle_session(true, Module) ->
 	handle_access(is_valid_access(Module), Module);
 handle_session(false, login) ->

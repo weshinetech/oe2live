@@ -82,5 +82,6 @@ validateLoginTimes(Fs, TestId) ->
 			myauth:userfields(Fs),
 			myauth:testfields(oe2tests:get(TestId)),
 			myauth:role("candidate"),
+			cache:session_id(myauth:username(), wf:session_id()),
 			helper:redirect("/exam")
 	end.

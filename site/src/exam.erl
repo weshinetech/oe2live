@@ -7,10 +7,17 @@
 % INIT MODULE
 %---------------------------------------------------------------------------------------------------
 main() ->
-	case myauth:pageloaded(?MODULE) of
-		true -> helper:redirect("/login");
-		_ -> myauth:main(?MODULE)
-	end.
+	handlePageReload(myauth:pageloaded(?MODULE)).
+
+handlePageReload(true) ->
+	helper:redirect("/login");
+handlePageReload(false) ->
+	handleSameSessionId(wf:session_id() == cache:session_id(myauth:username())).
+
+handleSameSessionId(true) ->
+	myauth:main(?MODULE);
+handleSameSessionId(false) ->
+	helper:redirect("/session_duplicate").
 
 title() ->
 	locale:get(exam_title).
@@ -218,26 +225,32 @@ actions_right() ->
 %---------------------------------------------------------------------------------------------------
 % EVENTS
 %---------------------------------------------------------------------------------------------------
-event({timer_flash, _} = E) ->
+event(Any) ->
+	case wf:session_id() == cache:session_id(myauth:username()) of
+		true -> myevent(Any);
+		false -> helper:redirect("/session_duplicate")
+	end.
+
+myevent({timer_flash, _} = E) ->
 	helper_ui:event(E);
 
-event({timer_exam, TimeLeft}) ->
+myevent({timer_exam, TimeLeft}) ->
 	loop_timer(TimeLeft);
 
-event(exam_questions_list) ->
+myevent(exam_questions_list) ->
 	wf:update(exam_page, layout_question_list());
 
-event(exam_marker) ->
+myevent(exam_marker) ->
 	on_save_marker(save_marker());
 
-event(exam_report_invalid) ->
+myevent(exam_report_invalid) ->
 	on_save_reported(save_reported());
 
-event(exam_first) ->
+myevent(exam_first) ->
 	helper:state(questionindex, 1),
 	updatequestion();
 
-event(exam_previous) ->
+myevent(exam_previous) ->
 	Index = helper:state(questionindex),
 	if
 		Index > 1 -> helper:state(questionindex, Index - 1);
@@ -245,7 +258,7 @@ event(exam_previous) ->
 	end,
 	updatequestion();
 
-event(exam_next) ->
+myevent(exam_next) ->
 	Index = helper:state(questionindex),
 	Length = length(getuservalue(oeuserqna)),
 	if
@@ -254,30 +267,30 @@ event(exam_next) ->
 	end,
 	updatequestion();
 
-event(exam_last) ->
+myevent(exam_last) ->
 	helper:state(questionindex, length(getuservalue(oeuserqna))),
 	updatequestion();
 
-event(exam_clear_selection) ->
+myevent(exam_clear_selection) ->
 	on_clear_option(clear_option());
 
-event(exam_submit_test) ->
+myevent(exam_submit_test) ->
 	wf:update(exam_page, layout_submit_confirm());
 
-event({option, Id, Option}) ->
+myevent({option, Id, Option}) ->
 	on_save_option(save_option(Id, Option));
 
-event({question_list, Index}) ->
+myevent({question_list, Index}) ->
 	helper:state(questionindex, Index),
 	updatequestion();
 
-event({submit_test, no}) ->
+myevent({submit_test, no}) ->
 	updatequestion();
 
-event({submit_test, yes}) ->
+myevent({submit_test, yes}) ->
 	endexam();
 
-event(Event) ->
+myevent(Event) ->
 	helper:print(Event).
 
 %---------------------------------------------------------------------------------------------------

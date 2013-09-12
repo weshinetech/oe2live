@@ -17,6 +17,8 @@ get(instructions_title) -> "Instructions";
 get(instructions_heading) -> "Instructions";
 get(software_update_title) -> "Software Update";
 get(softwate_update_heading) -> "Software Update";
+get(session_duplicate_title) -> "Duplicate Session";
+get(session_duplicate_heading) -> "Duplicate Session";
 
 get(create) -> "Create";
 get(edit) -> "Edit";
@@ -146,6 +148,7 @@ get(msg_unknown) -> "Unknown";
 get(msg_candidate_add_success) -> "Success. Visit Candidate Info for token.";
 get(msg_candidate_add_error_exists) -> "Candidate already exists.";
 get(msg_candidate_add_error) -> "Could not add candidate.";
+get(msg_session_duplicate_desc) -> "You have been logged out because the same account was used to login from a different machine.";
 
 get(admin_link_home) -> "Home";
 get(admin_link_tokens) -> "Tokens";

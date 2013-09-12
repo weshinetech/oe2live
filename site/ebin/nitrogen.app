@@ -13,5 +13,5 @@
                         myauth,mylist,mylist2,nitrogen_app,nitrogen_inets,
                         nitrogen_sup,oe2test,oe2tests,oeusers,profile_login,
                         profiles,questions,renderer,report_generate,
-                        software_update,tokens,unauthorised,utils_oe,
-                        utils_oe_manage,validators]}]}.
+                        session_duplicate,software_update,tokens,unauthorised,
+                        utils_oe,utils_oe_manage,validators]}]}.
