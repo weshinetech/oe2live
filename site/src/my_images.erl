@@ -19,7 +19,7 @@ send("/" ++ AttachmentName) ->
 		case ibrowse:send_req(Url, [], get, [],
 			[{basic_auth, {db:user(), db:password()}}]) of
 				{ok, _, _Headers, Data} ->
-					wf:content_type("multipart/form-data"),
+					wf:content_type("image"),
 					wf:header("Content-Disposition", "filename=" ++ AttachmentName),
 					Data;
 				_ ->
