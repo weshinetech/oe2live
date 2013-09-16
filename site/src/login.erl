@@ -75,6 +75,15 @@ validateLoginTimes(Fs, TestId) ->
 	UserLogins = fields:finduival(Fs, oeuserlogintimes),
 	case helper:s2i(UserLogins) >= helper:s2i(MaxLogins) of
 		true ->
+			F1 = fields:find(Fs, oeuserexamstate),
+			F2 = fields:find(Fs, oeuserendtime),
+			Fs1 = fields:delete(Fs, oeuserexamstate),
+			Fs2 = fields:delete(Fs1, oeuserendtime),
+			NewFs = Fs2 ++ [
+				F1#field {uivalue=?COMPLETED}, 
+				F2#field {uivalue=helper:i2s(helper:epochtime())}
+			],
+			oeusers:update(?DB_USERS ++ TestId, NewFs),
 			onloginfailed(login_failed_maxlogins);
 		false ->
 			FUser = fields:find(Fs, '_id'),
