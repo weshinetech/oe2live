@@ -49,8 +49,8 @@ loop_timer(TimeLeft) ->
 %---------------------------------------------------------------------------------------------------
 layout_timer(TimeLeft) ->
 	TimeFmt = case TimeLeft < 61 of
-		true -> "< 1m";
-		_ -> io_lib:format("~pm", [TimeLeft div 60])
+		true -> "< 1 min";
+		_ -> io_lib:format("~p min", [TimeLeft div 60])
 	end,
 	HighlightClass = if
 		TimeLeft < 120 -> "label-important";

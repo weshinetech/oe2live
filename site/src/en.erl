@@ -93,7 +93,7 @@ get(exam_previous) -> "Previous";
 get(exam_next) -> "Next";
 get(exam_last) -> "Last";
 get(exam_clear_selection) -> "Clear";
-get(exam_submit_test) -> "Submit";
+get(exam_submit_test) -> "Submit Test";
 get(exam_question_info_index) -> "Question #~p";
 get(exam_question_info_marks) -> "~s marks";
 get(exam_option_header) -> "Option";
