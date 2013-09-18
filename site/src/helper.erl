@@ -130,7 +130,7 @@ listupdate(K, V, L) ->
 	end.
 
 random_string(Len) ->
-	Chrs = list_to_tuple("ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz23456789"),
+	Chrs = list_to_tuple("abcdefghjkmnopqrstuvwxyz23456789"),
 	ChrsSize = size(Chrs),
 	random:seed(erlang:now()),
 	F = fun(_, R) -> [element(random:uniform(ChrsSize), Chrs) | R] end,

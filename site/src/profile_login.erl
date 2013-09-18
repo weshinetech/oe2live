@@ -22,7 +22,7 @@ layout() ->
 		#hr {class="myseparator"},
 		#panel {class="mycenter", body=[
 			#link {class="mylabel label label-default", url="/instructions", text=locale:get(instructions_click)},
-			#link {class="mylabel label label-default", url="/login", text=locale:get(login)}
+			#link {class="mylabel label label-default", url="/login", text=locale:get(candidate_login)}
 		]}
 	].
 

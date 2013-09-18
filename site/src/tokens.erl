@@ -46,4 +46,8 @@ event(Event) ->
 	helper:print(Event).
 
 show_download(FTest) ->
-	wf:update(download, #button {class="btn btn-primary", postback={download, FTest}, text=locale:get(msg_download)}).
+	wf:update(download, [
+		#button {class="btn", postback={download, FTest}, text=locale:get(msg_download)},
+		#span {text=" - "},
+		#link {class="btn", url="/print?type=tokens&testid=" ++ FTest#field.uivalue, text=locale:get(msg_print)}
+	]).

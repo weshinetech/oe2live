@@ -24,14 +24,17 @@ update(Fields) ->
 onupdate(_, _) ->
 	ok.
 
+list_active() ->
+	lists:map(fun(Fs) ->
+		{fields:finduival(Fs, '_id'), fields:finduival(Fs, testname)}
+	end, active()).
+
 active() ->
 	Docs = db:getdocs(getdb()),
 	lists:foldl(fun(D, Acc) ->
 		Fs = helper_api:doc2fields({ok, D}),
-		Id = fields:find(Fs, '_id'),
-		Name = fields:find(Fs, testname),
-		Acc ++ [{
-			Id#field.uivalue,
-			Name#field.uivalue
-		}]
+		case fields:finduival(Fs, teststatus) of
+			?ACTIVE -> Acc ++ [Fs];
+			_ -> Acc
+		end
 	end, [], Docs).

@@ -19,6 +19,7 @@ get(software_update_title) -> "Software Update";
 get(softwate_update_heading) -> "Software Update";
 get(session_duplicate_title) -> "Duplicate Session";
 get(session_duplicate_heading) -> "Duplicate Session";
+get(index_welcome) -> "Admin";
 
 get(create) -> "Create";
 get(edit) -> "Edit";
@@ -64,6 +65,9 @@ get(testname) -> "Name";
 get(testdescription) -> "Description";
 get(teststatus) -> "Status";
 get(testsactive) -> "Active Tests";
+get(testduration) -> "Duration (mins)";
+get(testdate) -> "Date";
+get(testmaxlogins) -> "Allowed Logins";
 
 get(optiona) -> "A";
 get(optionb) -> "B";
@@ -122,6 +126,7 @@ get(instructions_submit) -> "Once you submit the exam you will not be able to lo
 get(instructions_timer) -> "A timer will show you time remaining (In minutes only. Seconds will not be displayed.) for the exam.";
 get(instructions_browsers) -> "Recommended browsers: Latest versions of Mozilla Firefox and Google Chrome.";
 
+get(candidate_login) -> "Candidate Sign In";
 get(profile_login) -> "Admin Sign In";
 
 get(msg_unquthorised) -> "Unauthorised access to module.";
@@ -139,6 +144,7 @@ get(msg_generate_report_error_request_failed) -> "Failed to connect to main serv
 get(msg_generate_report_error_data_sync) -> "Data is not in sync with main server. Please contact exam co-ordinator immediately.";
 get(msg_generate_report_error_data_sync_ex) -> "Could not parse main server response";
 get(msg_download) -> "Download";
+get(msg_print) -> "Print";
 get(msg_software_update_alert) -> "DO NOT UPDATE SOFTWARE WHILE CANDIDATES ARE TAKING EXAM";
 get(msg_software_update_myversion) -> "My version: ";
 get(msg_software_update_repoversion) -> "Latest version: ";
@@ -149,6 +155,14 @@ get(msg_candidate_add_success) -> "Success. Visit Candidate Info for token.";
 get(msg_candidate_add_error_exists) -> "Candidate already exists.";
 get(msg_candidate_add_error) -> "Could not add candidate.";
 get(msg_session_duplicate_desc) -> "You have been logged out because the same account was used to login from a different machine.";
+get(msg_tokens) -> "Tokens";
+get(msg_please_wait) -> "Please wait ...";
+get(msg_software_version_stale) -> "You do not have latest software version. Click here to update";
+get(msg_absent) -> "Absent";
+
+get(index_yettostart) -> "To Start";
+get(index_active) -> "Active";
+get(index_completed) -> "Completed";
 
 get(admin_link_home) -> "Home";
 get(admin_link_tokens) -> "Tokens";

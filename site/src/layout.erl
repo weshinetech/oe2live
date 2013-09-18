@@ -217,3 +217,44 @@ table_values(Fields, Id) ->
 	}.
 
 row(E) -> #panel {class="row-fluid", body=E}.
+
+
+table_s(List, Fields, Columns, DefaultTxt) ->
+	Header = table_header_s(Fields, Columns),
+	Rows = table_rows_s(List, Fields, Columns, DefaultTxt),
+	io_lib:format("<table border=\"1\" cellspacing=\"0\" cellpadding=\"5\">~s~s</table>", [Header, Rows]).
+
+table_header_s(Fields, Columns) ->
+	Cells = lists:map(fun(_) ->
+		header_cells_s(Fields)
+	end, lists:seq(1, Columns)),
+	io_lib:format("<tr>~s</tr>", [Cells]).
+
+header_cells_s(Fields) ->
+	lists:map(fun(Id) ->
+		F = fields:get(Id),
+		io_lib:format("<td>~s</td>", [F#field.label])
+	end, Fields).
+
+table_rows_s(List, Fields, COLUMNS, DefaultTxt) ->
+	CellElements = lists:map(fun(L) -> row_cells_s(L, Fields, DefaultTxt) end, List),
+	ListOfCells = [lists:sublist(CellElements, X, COLUMNS) || X <- lists:seq(1, length(CellElements), COLUMNS)],
+	lists:map(fun(Cs) ->
+		Cs1 = case length(Cs) < COLUMNS of
+			true -> Cs ++ filler_cells_s(COLUMNS - length(Cs));
+			_ -> Cs
+		end,
+		io_lib:format("<tr>~s</tr>", [Cs1])
+	end, ListOfCells).
+
+row_cells_s(L, Fields, DefaultTxt) ->
+	lists:map(fun(F) -> cell_s(L, F, DefaultTxt) end, Fields).
+
+cell_s(L, Field, DefaultTxt) ->
+	case fields:find(L, Field) of
+		undefined -> io_lib:format("<td>~s</td>", [DefaultTxt]);
+		F -> io_lib:format("<td>~s</td>", [F#field.uivalue])
+	end.
+
+filler_cells_s(N) ->
+	lists:map(fun(_) -> "<td>...</td>" end, lists:seq(1, N)).

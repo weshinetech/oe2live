@@ -114,4 +114,8 @@ url_completed(FTest) ->
 	configs:get(mainserver) ++ "/oetest_completed?oetestid=" ++ FTest#field.uivalue ++ "&oecentercode=" ++ myauth:oecentercode().
 
 show_download(FTest) ->
-	wf:update(download, #button {class="btn btn-primary", postback={download, FTest}, text=locale:get(msg_download)}).
+	wf:update(download, [
+		#button {class="btn", postback={download, FTest}, text=locale:get(msg_download)},
+		#span {text=" - "},
+		#link {class="btn", url="/print?type=results&testid=" ++ FTest#field.uivalue, text=locale:get(msg_print)}
+	]).

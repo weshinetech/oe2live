@@ -35,7 +35,7 @@ layout() -> [
 	]},
 	#panel {class="row-fluid mycenter", body=[
 		#hr {class="myseparator"},
-		#link {class="mylabel label label-default", url="/login", text=locale:get(instructions_login)},
+		#link {class="mylabel label label-default", url="/login", text=locale:get(candidate_login)},
 		#link {class="mylabel label label-default", url="/profile_login", text=locale:get(profile_login)}
 	]}
 ].

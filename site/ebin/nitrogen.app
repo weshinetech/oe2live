@@ -11,7 +11,8 @@
                         helper_options,helper_ui,index,instructions,layout,
                         locale,login,my_dynamic_route_handler,my_images,
                         myauth,mylist,mylist2,nitrogen_app,nitrogen_inets,
-                        nitrogen_sup,oe2test,oe2tests,oeusers,profile_login,
-                        profiles,questions,renderer,report_generate,
-                        session_duplicate,software_update,tokens,unauthorised,
-                        utils_oe,utils_oe_manage,validators]}]}.
+                        nitrogen_sup,oe2test,oe2tests,oeusers,print,
+                        profile_login,profiles,questions,renderer,
+                        report_generate,session_duplicate,software_update,
+                        tokens,unauthorised,utils_oe,utils_oe_manage,
+                        validators]}]}.

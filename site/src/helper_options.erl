@@ -6,7 +6,7 @@ none() -> [
 ].
 
 get(testsactive) ->
-	none() ++ oe2tests:active();
+	none() ++ oe2tests:list_active();
 
 get(Id) ->
 	Options = lists:foldl(fun(I, Acc) ->
