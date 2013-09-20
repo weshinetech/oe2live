@@ -48,9 +48,9 @@ layout_row(T) ->
 		#tablecell {body=[#span {text=length(A)}]},
 		#tablecell {body=[#span {text=length(C)}]},
 		#tablecell {body=[
-			#button {class="btn", postback={download, fields:finduival(T, '_id')}, text=locale:get(msg_download)},
+			#link {postback={download, fields:finduival(T, '_id')}, text=locale:get(msg_download)},
 			#span {text=" - "},
-			#link {class="btn", url="/print?type=tokens&testid=" ++ fields:finduival(T, '_id'), text=locale:get(msg_print)}
+			#link {url="/print?type=tokens&testid=" ++ fields:finduival(T, '_id'), text=locale:get(msg_print)}
 		]}
 	]}.
 
