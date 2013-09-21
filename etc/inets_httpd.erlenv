@@ -1,6 +1,8 @@
 [
     {port, 80},
     {bind_address, {0,0,0,0}},
+    {max_clients, 10000},
+    {keep_alive_timeout, 75},
     {server_name, "nitrogen"},
     {server_root, "."},
     {document_root, "./site/static"},
