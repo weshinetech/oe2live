@@ -20,7 +20,7 @@ layout(software_update) ->
 		layout:g(10, #panel {class="mylabel", body=locale:get(msg_software_update_alert)}),
 		layout:g(10, #panel {class="mylabel", id=myversion, body=locale:get(msg_software_update_myversion) ++ getMyversion()}),
 		layout:g(10, #panel {class="mylabel", id=repoversion, body=locale:get(msg_software_update_repoversion) ++ locale:get(msg_checking)}),
-		layout:g(10, #panel {class="mylabel", id=updatearea, body=[]})
+		layout:g(10, #panel {class="mylabel", id=updatearea, body=#button {class="btn btn-danger", postback=update, text=locale:get(msg_update_software)}})
 	],
 	wf:wire(#event{type=timer, delay=1000, postback=repoversion}),
 	Elements.
@@ -45,7 +45,7 @@ getMyversion() ->
 checkRepoversion() ->
 	case is_latest() of
 		{true, _} -> ok;
-		{false, Rv} -> show_update_button(), wf:update(repoversion, locale:get(msg_software_update_repoversion) ++ Rv)
+		{false, Rv} -> wf:update(repoversion, locale:get(msg_software_update_repoversion) ++ Rv)
 	end.
 
 show_update_button() ->

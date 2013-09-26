@@ -17,7 +17,7 @@ handlePageReload(false) ->
 handleSameSessionId(true) ->
 	myauth:main(?MODULE);
 handleSameSessionId(false) ->
-	helper:redirect("/session_duplicate").
+	helper:redirect("/login").
 
 title() ->
 	locale:get(exam_title).
@@ -29,7 +29,12 @@ layout() ->
 	on_initexam(initexam()),
 	myauth:pageloaded(?MODULE, true),
 	helper:state(questionindex, 1),
-	Body = #panel {id=exam_page, body=layout_question()},
+	QuestionElements = try
+		layout_question()
+	catch
+		_:_ -> "Error #0002"
+	end,
+	Body = #panel {id=exam_page, body=QuestionElements},
 	loop_timer(helper:s2i(getuservalue(oeusertimeleftseconds))),
 	Body.
 
@@ -368,8 +373,13 @@ getanswered(Id) ->
 	end.
 
 updatequestion() ->
-	wf:update(exam_page, layout_question()),
-	wf:wire("MathJax.Hub.Queue([\"Typeset\",MathJax.Hub]);").
+	try
+		wf:update(exam_page, layout_question()),
+		wf:wire("MathJax.Hub.Queue([\"Typeset\",MathJax.Hub]);")
+	catch
+		_:_ ->
+			 wf:update(exam_page, "Error #001")
+	end.
 
 getoptionvalue(optiona) -> "a";
 getoptionvalue(optionb) -> "b";

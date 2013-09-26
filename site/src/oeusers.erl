@@ -121,4 +121,7 @@ getpaper(TestId) ->
 	random:seed(erlang:now()),
 	N = random:uniform(length(Users)),
 	User = lists:nth(N, Users),
-	fields:finduival(User, oeuserqna).
+	List = fields:finduival(User, oeuserqna),
+	lists:map(fun({Q, _}) ->
+		{Q, "0"}
+	end, List).
