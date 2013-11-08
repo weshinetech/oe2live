@@ -19,14 +19,6 @@ layout(report_generate) ->
 	{Fs, Es} = layout:get(?CREATE, helper_ui:fields(?MODULE), helper_ui:events(eids())),
 	[
 		layout:g(10, layout:form(oe2form_simple, ?MODULE, {Fs, Es})),
-		layout:g(10, #panel {class="well", body=[
-			#panel {body=locale:get(msg_generate_report_declare)},
-			#br{},
-			#panel {body=locale:get(msg_generate_report_declare_over)},
-			#panel {body=locale:get(msg_generate_report_declare_sync)},
-			#br{},
-			#panel {body=fullname()}
-		]}),
 		layout:g(10, #panel {id=sync_status, body=[]}),
 		layout:g(10, #panel {id=download, body=[]}),
 		layout:g(10, #panel {id=result, body=[]})

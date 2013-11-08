@@ -60,7 +60,7 @@ validateUser(Fs, Password, TestId) ->
 validatePassword(Fs, #field {uivalue=Password}, Password, TestId) ->
 	validateTestState(Fs, fields:find(Fs, oeuserexamstate), TestId);
 validatePassword(_, _, _, _) ->
-	onloginfailed().
+	onloginfailed(login_failed_password).
 
 validateTestState(_, undefined, _) ->
 	onloginfailed();
@@ -89,7 +89,7 @@ validateLoginTimes(Fs, TestId) ->
 			FUser = fields:find(Fs, '_id'),
 			myauth:username(FUser#field.uivalue),
 			myauth:userfields(Fs),
-			myauth:testfields(oe2tests:get(TestId)),
+			myauth:testfields(TestFs),
 			myauth:role("candidate"),
 			cache:session_id(myauth:username(), wf:session_id()),
 			helper:redirect("/exam")

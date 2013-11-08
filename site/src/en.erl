@@ -49,7 +49,7 @@ get(profile_login_heading) -> "Sign In";
 get(oeusercentercode) -> "Centre Code";
 get(oeuserseatnumber) -> "Seat Number";
 get(oeuserfullname) -> "Full Name";
-get(oeuseraddname) -> "Additional Name";
+get(oeuseraddname) -> "Mother's Name";
 get(oeuserlogintimes) -> "# of logins";
 get(oeusertoken) -> "Token";
 get(oeusertimeleftseconds) -> "Time (secs)";
@@ -76,12 +76,15 @@ get(optiond) -> "D";
 get(optione) -> "E";
 
 get(validator_required) -> "Required";
-get(validator_length5) -> "Too short";
-get(validator_length8) -> "Too short";
+get(validator_length5) -> "Too Short";
+get(validator_length8) -> "Too Short";
+get(validator_nospaces) -> "Spaces Not Allowed";
+get(validator_alphanumeric) -> "Required Alphanumeric";
 
 get(login_failed) -> "Login failed.";
 get(login_failed_expired) -> "Login failed. Your test has ended.";
 get(login_failed_maxlogins) -> "Login failed. You have exceeded the number of allowed logins.";
+get(login_failed_password) -> "Login failed. Invalid password";
 
 get(exam_title) -> "Online Examination";
 get(exam_heading) -> "Online Examination";

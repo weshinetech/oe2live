@@ -36,7 +36,20 @@ event({timer_flash, _} = E) ->
 
 event(create) ->
 	Fields = fields:uivalue(helper_ui:fields(?MODULE)),
-	onresult(oeusers:candidate_addition(Fields));
+	NewFields = lists:foldl(fun(F, Acc) ->
+		case F#field.id of
+			'_id' ->
+				Acc ++[F];
+			'_rev' ->
+				Acc ++[F];
+			testsactive ->
+				Acc ++[F];
+			_ ->
+				NewVal = string:to_upper(F#field.uivalue),
+				Acc ++ [F#field {uivalue=NewVal}]
+		end
+	end, [], Fields),
+	onresult(oeusers:candidate_addition(NewFields));
 
 event(Event) ->
 	helper:print(Event).

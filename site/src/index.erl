@@ -19,11 +19,9 @@ layout(index) ->
 	Elements = [
 		#h4 {text=configs:get(customer_text)},
 		#hr{},
-		#panel {id=updatearea, body=[]},
 		#panel {id=result, body=locale:get(msg_please_wait)}
 	],
 	wf:wire(#event{type=timer, delay=1000, postback=load_table}),
-	wf:wire(#event{type=timer, delay=1000, postback=check_software_update}),
 	Elements.
 
 layout_tests(Tests) ->
@@ -57,25 +55,9 @@ layout_row(T) ->
 event(load_table) ->
 	wf:update(result, layout_tests(oe2tests:active()));
 
-event(check_software_update) ->
-	check_software_update();
-
 event({download, TestId}) ->
 	Url = "/download?type=tokens&testid=" ++ TestId,
 	helper:redirect(Url);
 
 event(E) ->
 	helper:print(E).
-
-check_software_update() ->
-	case software_update:is_latest() of
-		{true, _} ->
-			ok;
-		{false, _} -> 
-			wf:update(updatearea, #panel {body=[
-				#link {class="mylabel label label-important", 
-					text=locale:get(msg_software_version_stale), 
-					url="/software_update"},
-				#hr{}
-			]})
-	end.

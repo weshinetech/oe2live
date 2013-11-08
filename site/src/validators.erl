@@ -118,7 +118,28 @@ get(ip_address) ->
 			_:_ -> false
 		end
 	end;	
-	
+
+get(nospaces) ->
+	fun(_, V) ->
+		try
+			length(string:tokens(V, " ")) == 1
+		catch
+			_:_ -> false
+		end
+	end;	
+
+get(alphanumeric) ->
+	fun(_, V) ->
+		try
+			case re:run(V, "^[0-9a-zA-Z]*$") of
+				{match, _} -> true;
+				_ -> false
+			end
+		catch
+			_:_ -> false
+		end
+	end;	
+
 get(Validator) ->
 	helper:print(Validator),
 	throw (validator_does_not_exist).
@@ -153,6 +174,8 @@ tip(dob) -> locale(dob);
 tip(length8) -> locale(length8);
 tip(length5) -> locale(length5);
 tip(noallspaces) -> locale(noallspaces);
+tip(nospaces) -> locale(nospaces);
+tip(alphanumeric) -> locale(alphanumeric);
 tip(_) -> locale(required).
 
 locale(Id) -> locale:get(helper:l2a("validator_" ++ helper:a2l(Id))).

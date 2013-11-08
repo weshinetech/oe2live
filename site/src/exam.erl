@@ -343,6 +343,8 @@ endexam(TimeLeft) ->
 		F3#field {uivalue=helper:i2s(TimeLeft)}
 	],
 	save_user(NewFs),
+	cache:session_id(myauth:username(), undefined),
+	myauth:pageloaded(?MODULE, false),
 	helper:redirect("/login").
 
 increment_logintimes(#field {uivalue=Times}) ->

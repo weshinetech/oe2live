@@ -27,14 +27,15 @@ role(Role) ->
 role() ->
 	helper:session(role).
 
-pageloaded(Page, true) ->
-	helper:session({pageloaded, Page}, true).
+pageloaded(Page, State) ->
+	helper:session({pageloaded, Page}, State).
 
 pageloaded(Page) ->
 	helper:session({pageloaded, Page}) == true.
 
 clear_session() ->
 	username(undefined),
+	userfields(undefined),
 	role(undefined).
 
 is_authenticated() ->

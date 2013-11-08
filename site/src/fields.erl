@@ -82,7 +82,7 @@ get(unit = I) -> textbox(I);
 % user
 get(oeuserid = I) -> hidden(I);
 get(oeusercentercode = I) -> textbox(I);
-get(oeuserseatnumber = I) -> textbox(I); 
+get(oeuserseatnumber = I) -> F = textbox(I), F#field {validators=[nospaces, alphanumeric]};
 get(oeuserfullname = I) -> textbox(I);
 get(oeuseraddname = I) -> textbox(I);
 get(oeuserlogintimes = I) -> textbox(I);
