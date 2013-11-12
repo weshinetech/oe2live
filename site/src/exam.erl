@@ -146,8 +146,12 @@ layout_question_info(Fs) ->
 
 %---------------------------------------------------------------------------------------------------
 layout_question_desc(Fs) ->
+	MainText = case fields:find(Fs, maintext) of
+		undefined -> [];
+		Text -> #panel {class="well", body=Text#field.uivalue}
+	end,
 	Description = fields:find(Fs, questiondescription),
-	#panel {class="well", body=Description#field.uivalue}.
+	[MainText, #panel {class="well", body=Description#field.uivalue}].
 
 %---------------------------------------------------------------------------------------------------
 layout_question_options(Fs) ->

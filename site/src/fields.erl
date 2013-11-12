@@ -69,6 +69,7 @@ get(questions =I) -> mylist:get(I);
 
 % question
 get(questionid = I) -> hidden(I);
+get(maintext = I) -> html(I);
 get(questiondescription = I) -> html(I);
 get(optiona = I) -> html(I);
 get(optionb = I) -> html(I);
