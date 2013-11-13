@@ -99,7 +99,7 @@ layout_question_list_cells({Index, O}) ->
 	end,
 	[
 		#tablecell {body=[
-			#link {class="exam_nav_link", text=io_lib:format("~2..0B", [Index]), postback={question_list, Index}},
+			#link {class="exam_nav_link", text=io_lib:format("~3..0B", [Index]), postback={question_list, Index}},
 			#span {class="mylabel label label-default", text=getoptiondisplay(O)},
 			#span {class="mylabel label label-default", body=BookMark},
 			#span {class="mylabel label label-important", body=Reported}
@@ -215,8 +215,7 @@ nav_right() ->
 actions_left() ->
 	#panel {class="actions_left", body=[
 		#button {class="btn btn-info", text=locale:get(exam_questions_list), postback=exam_questions_list},
-		#button {class="btn btn-default", text=locale:get(exam_marker), postback=exam_marker},
-		#button {class="btn btn-default", text=locale:get(exam_report_invalid), postback=exam_report_invalid}
+		#button {class="btn btn-default", text=locale:get(exam_marker), postback=exam_marker}
 	]}.
 actions_center() ->
 	#panel {class="actions_center", body=[
