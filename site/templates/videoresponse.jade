@@ -1,0 +1,19 @@
+!!!
+html
+	include head
+body
+	.navbar.navbar-fixed-top
+		.navbar-inner
+			.container-fluid
+				.row [[[helper_ui:flash_element()]]]
+				.row-fluid
+					.span4
+						div [[[videoresponse:nav_left()]]]
+					.span4(align="center")
+						img(src!="[[[configs:get(customer_image)]]]")
+					.span4
+						div.pull-right [[[videoresponse:nav_right()]]]
+	.container-fluid
+		div [[[page:layout()]]]
+
+	script [[[script]]]

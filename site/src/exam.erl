@@ -189,14 +189,28 @@ layout_option(Id, O) ->
 
 %---------------------------------------------------------------------------------------------------
 layout_submit_confirm() ->
-	#panel {class="myconfirmpanel", body=[
-		#span {class="label label-important", text=locale:get(exam_submit_important)},
-		#hr{},
-		#span {text=locale:get(exam_submit_test_confirm)},
-		#hr{},
-		#button {class="btn btn-danger", text=locale:get(exam_submit_test_confirm_yes), postback={submit_test, yes}},
-		#button {class="btn btn-default", text=locale:get(exam_submit_test_confirm_no), postback={submit_test, no}}
-	]}.
+	MinAppearSeconds = helper:s2i(gettestvalue(oe_min_appear_minutes))*60,
+	TimeLeftSeconds = helper:s2i(getuservalue(oeusertimeleftseconds)),
+	TestDuration = helper:s2i(gettestvalue(testduration))*60,
+	case MinAppearSeconds > (TestDuration - TimeLeftSeconds) of
+		true ->
+			#panel {class="myconfirmpanel", body=[
+				#span {class="label label-warning", text=locale:get(exam_submit_important)},
+				#hr{},
+				#span {text=io_lib:format(locale:get(exam_submit_test_min_appear), [gettestvalue(oe_min_appear_minutes)])},
+				#hr{},
+				#button {class="btn btn-default", text=locale:get(exam_submit_test_min_appear_ok), postback={submit_test, no}}
+			]};
+		false ->
+			#panel {class="myconfirmpanel", body=[
+				#span {class="label label-important", text=locale:get(exam_submit_important)},
+				#hr{},
+				#span {text=locale:get(exam_submit_test_confirm)},
+				#hr{},
+				#button {class="btn btn-danger", text=locale:get(exam_submit_test_confirm_yes), postback={submit_test, yes}},
+				#button {class="btn btn-default", text=locale:get(exam_submit_test_confirm_no), postback={submit_test, no}}
+			]}
+	end.
 
 %---------------------------------------------------------------------------------------------------
 % NAVIGATION
@@ -213,10 +227,14 @@ nav_right() ->
 	]}.
 
 actions_left() ->
+	InvalidElement = case gettestvalue(oe_report_invalid_enabled) of
+		"no" -> [];
+		_ -> #button {class="btn btn-default", text=locale:get(exam_report_invalid), postback=exam_report_invalid}
+	end,
 	#panel {class="actions_left", body=[
 		#button {class="btn btn-info", text=locale:get(exam_questions_list), postback=exam_questions_list},
 		#button {class="btn btn-default", text=locale:get(exam_marker), postback=exam_marker},
-		#button {class="btn btn-default", text=locale:get(exam_report_invalid), postback=exam_report_invalid}
+		InvalidElement
 	]}.
 actions_center() ->
 	#panel {class="actions_center", body=[

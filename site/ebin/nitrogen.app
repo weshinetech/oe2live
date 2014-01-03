@@ -15,4 +15,4 @@
                         profile_login,profiles,questions,renderer,
                         report_generate,session_duplicate,software_update,
                         tokens,unauthorised,utils_oe,utils_oe_manage,
-                        validators]}]}.
+                        validators,videoresponse]}]}.

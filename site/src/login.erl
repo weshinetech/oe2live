@@ -92,5 +92,10 @@ validateLoginTimes(Fs, TestId) ->
 			myauth:testfields(TestFs),
 			myauth:role("candidate"),
 			cache:session_id(myauth:username(), wf:session_id()),
-			helper:redirect("/exam")
+			handle_app_redirect(fields:finduival(Fs, oe_videoresponse_response_state))
 	end.
+
+handle_app_redirect([]) ->
+	helper:redirect("/exam");
+handle_app_redirect(_) ->
+	helper:redirect("/videoresponse").

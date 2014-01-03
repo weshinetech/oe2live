@@ -30,6 +30,7 @@ access(test, edit) -> [admin, oeadmin];
 access(test, create) -> [admin, oeadmin];
 
 access(exam, _) -> [candidate];
+access(videoresponse, _) -> [candidate];
 
 access(index, _) -> [admin, oeadmin, oestaff];
 access(tokens, _) -> [admin, oeadmin, oestaff];

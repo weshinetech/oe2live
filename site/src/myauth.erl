@@ -27,6 +27,10 @@ role(Role) ->
 role() ->
 	helper:session(role).
 
+host() ->
+	{host, Host} = lists:keyfind(host, 1, wf:headers()),
+	Host.
+
 pageloaded(Page, State) ->
 	helper:session({pageloaded, Page}, State).
 
@@ -88,5 +92,7 @@ load_template(login) ->
 	#template {file="./site/templates/login.html"};
 load_template(exam) ->
 	#template {file="./site/templates/exam.html"};
+load_template(videoresponse) ->
+	#template {file="./site/templates/videoresponse.html"};
 load_template(_) ->
 	#template {file="./site/templates/bare.html"}.

@@ -72,6 +72,12 @@ options(oeuseraddreason) -> [
 	other
 ];
 
+options(oe_videoresponse_response_state) -> [
+	oe_videoresponse_response_state_new,
+	oe_videoresponse_response_state_partial,
+	oe_videoresponse_response_state_completed
+];
+
 options(Other) ->
 	helper:print(Other),
 	throw(optionlist_not_found).

@@ -20,6 +20,8 @@ get(softwate_update_heading) -> "Software Update";
 get(session_duplicate_title) -> "Duplicate Session";
 get(session_duplicate_heading) -> "Duplicate Session";
 get(index_welcome) -> "Admin";
+get(videoresponse_title) -> "VideoResponse";
+get(videoresponse_heading) -> "VideoResponse";
 
 get(create) -> "Create";
 get(edit) -> "Edit";
@@ -113,6 +115,8 @@ get(exam_option_save_failed) -> "Could not save option for question (~p)";
 get(exam_marker_save_failed) -> "Could not save marker for question (~p)";
 get(exam_reported_save_failed) -> "Could not report question (~p)";
 get(exam_timer_save_failed) -> "Could not save timer";
+get(exam_submit_test_min_appear) -> "You are required to attend this test for at least ~s minutes. You can submit test later.";
+get(exam_submit_test_min_appear_ok) -> "OK. Go back.";
 
 get(instructions) -> "Instructions";
 get(instructions_click) -> "Instructions";

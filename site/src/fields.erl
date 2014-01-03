@@ -26,6 +26,9 @@ get(landline = I) -> F = textbox(I), F#field {validators=[mobile]};
 get(email = I) -> F = textbox(I), F#field {validators=[email]};
 get(testduration = I) -> F = textbox(I), F#field {validators=[integer]};
 get(oecentercode = I) -> textbox(I);
+get(oe_min_appear_minutes = I) -> F = textbox(I), F#field {validators=[integer]};
+get(oe_videoresponse_postid = I) -> F = textbox(I), F#field {validators=[]};
+get(oe_videoresponse_responseid = I) -> textbox(I);
 
 % textarea
 get(testdescription = I) -> textarea(I);
@@ -42,6 +45,8 @@ get(year = I) -> dropdown(I);
 get(academic_branch = I) -> dropdown(I);
 get(academic_course_year = I) -> dropdown(I);
 get(academic_semester = I) -> dropdown(I);
+get(oe_report_invalid_enabled = I) -> dropdown(I);
+get(oe_videoresponse_response_state = I) -> dropdown(I);
 
 % fixed
 get(profiletype = I) -> fixed(I);
@@ -479,3 +484,6 @@ finduival(Fields, Id) ->
 		undefined -> [];
 		F -> F#field.uivalue
 	end.
+
+getuivalue(Fields, Id) ->
+	finduival(Fields, Id).
