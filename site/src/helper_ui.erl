@@ -14,7 +14,7 @@ flash(Type, Msg) ->
 	TimeOutSeconds = 5,
 	Id = helper:uid(),
 	wf:update(myalert, getflashelement(Id, Type, Msg)),
-	wf:wire(#event{type=timer, delay=TimeOutSeconds*1000, postback={timer_flash, Id}}).
+	wf:wire(#event{type=timer, delay=TimeOutSeconds*1000, target=Id, actions=#hide{}}).
 
 getflashelement(Id, error, Text) ->
 	#panel {id=Id, class="alert alert-error", body=Text};

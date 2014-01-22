@@ -3,6 +3,8 @@
 -include("records.hrl").
 -include_lib("nitrogen_core/include/wf.hrl").
 
+-define(INTERVAL_SECS_COMET, 20).
+
 %---------------------------------------------------------------------------------------------------
 % INIT MODULE
 %---------------------------------------------------------------------------------------------------
@@ -35,7 +37,8 @@ layout() ->
 		_:_ -> "Error #0002"
 	end,
 	Body = #panel {id=exam_page, body=QuestionElements},
-	loop_timer(helper:s2i(getuservalue(oeusertimeleftseconds))),
+	wf:switch_to_polling(?INTERVAL_SECS_COMET*1000),
+	wf:comet(fun() -> loop_timer(helper:s2i(getuservalue(oeusertimeleftseconds))) end),
 	Body.
 
 %---------------------------------------------------------------------------------------------------
@@ -44,10 +47,16 @@ layout() ->
 loop_timer(TimeLeft) when TimeLeft < 1 ->
 	endexam(0);
 loop_timer(TimeLeft) ->
-	Interval = 60,
-	save_timer(TimeLeft),
-	wf:update(exam_timer, layout_timer(TimeLeft)),
-	wf:wire(#event{type=timer, delay=Interval*1000, postback={timer_exam, TimeLeft - Interval}}).
+	try
+		Interval = 60,
+		save_timer(TimeLeft),
+		wf:update(exam_timer, layout_timer(TimeLeft)),
+		wf:flush(),
+		timer:sleep(Interval*1000),
+		loop_timer(TimeLeft - Interval)
+	catch
+		_:_ -> helper:redirect("/login")
+	end.
 
 %---------------------------------------------------------------------------------------------------
 % LAYOUTS
