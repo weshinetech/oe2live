@@ -37,4 +37,3 @@
 -eval "application:start(couchbeam)"
 -eval "application:start(inets)"
 -eval "application:start(bcrypt)"
--eval "application:start(sync)"
