@@ -29,6 +29,7 @@ get(oecentercode = I) -> textbox(I);
 get(oe_min_appear_minutes = I) -> F = textbox(I), F#field {validators=[integer]};
 get(oe_videoresponse_postid = I) -> F = textbox(I), F#field {validators=[]};
 get(oe_videoresponse_responseid = I) -> textbox(I);
+get(oecustomerid = I) -> textbox(I);
 
 % textarea
 get(testdescription = I) -> textarea(I);

@@ -54,7 +54,10 @@ getdocs(DbName) ->
 	case couchbeam_view:all(db(DbName), [include_docs]) of
 		{ok, Docs} ->
 			lists:foldl(fun({Doc}, Acc) ->
-				Acc ++ [couchbeam_util:get_value(<<"doc">>, Doc)]
+				case helper:b2l(couchbeam_util:get_value(<<"id">>, Doc)) of
+					"_design/" ++ _ -> Acc;
+					_ -> Acc ++ [couchbeam_util:get_value(<<"doc">>, Doc)]
+				end
 			end, [], Docs);
 		_ -> []
 	end.

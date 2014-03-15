@@ -29,8 +29,10 @@ getuser(Username) ->
 		helper_api:doc2fields({ok, D})
 	end, db:getdocs(getdb())),
 	List = lists:filter(fun(F) -> 
-		UsernameF = fields:find(F, username), 
-		UsernameF#field.uivalue == Username
+		case UsernameF = fields:find(F, username) of
+			undefined -> false;
+			_ -> UsernameF#field.uivalue == Username
+		end
 	end, Users),
 	case List of
 		[User] -> User;

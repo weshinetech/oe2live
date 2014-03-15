@@ -27,6 +27,15 @@ title() ->
 heading() ->
 	locale:get(exam_heading).
 
+brand(customer_image) ->
+	Fs = myauth:testfields(),
+	case fields:find(Fs, oecustomerid) of
+		undefined ->
+			configs:get(customer_image);
+		F ->
+			lists:flatten(io_lib:format("/images/~s-logo.jpg", [F#field.uivalue]))
+	end.
+
 layout() ->
 	on_initexam(initexam()),
 	myauth:pageloaded(?MODULE, true),

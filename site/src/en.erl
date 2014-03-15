@@ -166,6 +166,7 @@ get(msg_tokens) -> "Tokens";
 get(msg_please_wait) -> "Please wait ...";
 get(msg_software_version_stale) -> "You do not have latest software version. Click here to update";
 get(msg_absent) -> "Absent";
+get(msg_dashboard) -> "Dashboard";
 
 get(index_yettostart) -> "To Start";
 get(index_active) -> "Active";

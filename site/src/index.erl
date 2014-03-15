@@ -17,7 +17,7 @@ layout() ->
 
 layout(index) ->
 	Elements = [
-		#h4 {text=configs:get(customer_text)},
+		#h4 {text=locale:get(msg_dashboard)},
 		#hr{},
 		#panel {id=result, body=locale:get(msg_please_wait)}
 	],

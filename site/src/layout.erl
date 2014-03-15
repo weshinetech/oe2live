@@ -40,6 +40,7 @@ getevent(#jevent {} = E) -> [
 form(oe2form_simple, Module, {Fs, Es}) ->
 	#panel {class="oe2form-simple", body=[
 		#h4 {text=Module:heading()},
+		#hr{},
 		layout(oe2form_simple, fields, Fs),
 		layout(oe2form_simple, events, Es),
 		#panel {class="myspinner", body=#spinner{}}

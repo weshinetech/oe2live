@@ -17,7 +17,6 @@ heading() ->
 layout() ->
 	{Fs, Es} = layout:get(?CREATE, fields(), helper_ui:events(eids())),
 	[
-		#h2 {class="mycenter", text=configs:get(customer_text)},
 		layout:form(oe2form, ?MODULE, {Fs, Es}),
 		#hr {class="myseparator"},
 		#panel {class="mycenter", body=[
