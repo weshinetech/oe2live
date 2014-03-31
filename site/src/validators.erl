@@ -140,6 +140,9 @@ get(alphanumeric) ->
 		end
 	end;	
 
+get(percentage) ->
+	get(range_integer, -1, 101);
+
 get(Validator) ->
 	helper:print(Validator),
 	throw (validator_does_not_exist).
@@ -176,6 +179,7 @@ tip(length5) -> locale(length5);
 tip(noallspaces) -> locale(noallspaces);
 tip(nospaces) -> locale(nospaces);
 tip(alphanumeric) -> locale(alphanumeric);
+tip(percentage) -> locale(percentage);
 tip(_) -> locale(required).
 
 locale(Id) -> locale:get(helper:l2a("validator_" ++ helper:a2l(Id))).

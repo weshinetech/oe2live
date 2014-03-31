@@ -16,7 +16,7 @@ get(mylist2, Id, Label) ->
 	}.
 
 renderer() ->
-	fun(Md, _, #field {id=I, uivalue=V}) ->
+	fun(Md, _, #field {id=I, label=L, uivalue=V}) ->
 		if
 			Md == ?CREATE ->
 				#hidden {id=I, text=[]};
@@ -24,7 +24,7 @@ renderer() ->
 				helper:state(I, V),
 				#hidden {id=I, text=[]};
 			true ->
-				[]
+				{L, layout(V)}
 		end
 	end.
 
@@ -62,3 +62,7 @@ remove(Field, ToRemove) ->
 		false -> List
 	end,
 	Field#field {dbvalue=NewList}.
+
+layout(undefined) -> [];
+layout([]) -> [];
+layout(List) ->	lists:map(fun({K, V}) -> #panel {body=K ++ " " ++ V} end, List).

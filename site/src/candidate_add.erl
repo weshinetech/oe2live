@@ -13,11 +13,8 @@ heading() ->
 	locale:get(candidate_add_heading).
 
 layout() ->
-	helper_admin:layout(?MODULE).
-
-layout(candidate_add) ->
 	{Fs, Es} = layout:get(?CREATE, helper_ui:fields(?MODULE), helper_ui:events(eids())),
-	layout:g(10, layout:form(oe2form_horizontal, ?MODULE, {Fs, Es})).
+	helper_ui:fullpage(layout:g(10, layout:form(oe2form_horizontal, ?MODULE, {Fs, Es}))).
 
 fids() -> [
 	testsactive,
@@ -30,9 +27,6 @@ fids() -> [
 eids() -> [
 	create
 ].
-
-event({timer_flash, _} = E) ->
-	helper_ui:event(E);
 
 event(create) ->
 	Fields = fields:uivalue(helper_ui:fields(?MODULE)),
@@ -54,8 +48,12 @@ event(create) ->
 event(Event) ->
 	helper:print(Event).
 
-onresult({ok, _}) ->
-	helper_ui:flash(success, locale:get(msg_candidate_add_success));
+onresult({ok, _} =Res) ->
+	U = helper_api:doc2fields(Res),
+	TId = wf:q(testsactive),
+	UId = fields:getuivalue(U, '_id'),
+	Url = "/candidate?oeuserseatnumber=" ++ UId ++ "&oetestid=" ++ TId,
+	helper:redirect(Url);
 onresult({error, exists}) ->
 	helper_ui:flash(error, locale:get(msg_candidate_add_error_exists));
 onresult({error, _}) ->

@@ -13,58 +13,53 @@ heading() ->
 	locale:get(candidate_status_heading).
 
 layout() ->
-	helper_admin:layout(?MODULE).
+	helper_ui:fullpage(layout(wf:q(oetestid))).
 
-layout(candidate_status) ->
-	{Fs, Es} = layout:get(?CREATE, helper_ui:fields(?MODULE), helper_ui:events(eids())),
+layout(undefined) ->
+	helper:redirect("/index");
+layout(TestId) ->
+	T = oe2tests:get(TestId),
+	{Y, A, C} = oeusers:getusers_by_state(TestId),
 	[
-		layout:g(10, layout:form(oe2form_simple, ?MODULE, {Fs, Es})),
-		layout:g(10, #panel {id=result_summary, body=[]}),
-		layout:g(10, #panel {id=result, body=[]})
+		summary(T, Y, A, C),
+		status(Y, A, C)
 	].
 
-fids() -> [
-	testsactive
-].
-
-eids() -> [
-	show_create
-].
-
-event(show_create) ->
-	[FTest] = fields:uivalue(helper_ui:fields(?MODULE)),
-	{Y, A, C} = oeusers:getusers_by_state(FTest#field.uivalue),
-	wf:update(result, #panel {body=[
-		summary(Y, A, C),
-		status(Y, A, C)
-	]});
-
-event(Event) ->
-	helper:print(Event).
-
 status(Y, A, C) ->
-	Ids = [oeusercentercode, oeuserseatnumber, oeuserfullname, oeusertimeleftseconds, oeuserexamstate],
+	Ids = [oeuserseatnumber, oeuserfullname, oeuserips, oeuserlogintimes, oeusertimeleftseconds, oeuserexamstate],
 	#table {
-		class="table table-bordered table-hover",
+		class="table table-bordered table-hover table-condensed",
 		rows=helper_admin:layout_oeuser_header(Ids) ++
 			helper_admin:layout_oeuser_rows(A, Ids, "error") ++ 
 			helper_admin:layout_oeuser_rows(C, Ids, "success") ++ 
 			helper_admin:layout_oeuser_rows(Y, Ids, "")
 	}.
 
-summary(Y, A, C) ->
+summary(T, Y, A, C) ->
 	#table {
-		class="myfixedwidthtable table table-bordered table-hover",
+		class="myfixedwidthtable table table-bordered table-hover table-condensed",
 		rows=[
-			#tablerow {class="error", cells =[
+			#tablerow {cells =[
+				#tablecell {body=#span {text=locale:get(oetestcourseid)}},
+				#tablecell {body=#span {text=fields:getuivalue(T, oetestcourseid)}}
+			]},
+			#tablerow {cells =[
+				#tablecell {body=#span {text=locale:get(testname)}},
+				#tablecell {body=#span {text=fields:getuivalue(T, testname)}}
+			]},
+			#tablerow {cells =[
+				#tablecell {body=#span {text=locale:get(testdate)}},
+				#tablecell {body=#span {text=fields:getuivalue(T, testdate)}}
+			]},
+			#tablerow {cells =[
 				#tablecell {body=#span {text=locale:get(active)}},
 				#tablecell {body=#span {text=length(A)}}
 			]},
-			#tablerow {class="success", cells=[
+			#tablerow {cells=[
 				#tablecell {body=#span {text=locale:get(completed)}},
 				#tablecell {body=#span {text=length(C)}}
 			]},
-			#tablerow {class="", cells=[
+			#tablerow {cells=[
 				#tablecell {body=#span {text=locale:get(yettostart)}},
 				#tablecell {body=#span {text=length(Y)}}
 			]}

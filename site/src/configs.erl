@@ -13,6 +13,12 @@ from_cache(K, undefined) ->
 from_cache(_, V) ->
 	V.
 
+default(oe2version) ->
+	case file:read_file("etc/oe2version") of
+		{ok, Version} -> helper:b2l(Version);
+		_ -> locale:get(msg_unknown)
+	end;
+
 default(Key) ->
 	case file:consult("etc/oe2agentconfig") of
 		{ok, List} ->

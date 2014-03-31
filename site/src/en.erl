@@ -5,12 +5,12 @@ get(unauthorised_title) -> "Unauthorised";
 get(unauthorised_heading) -> "Unauthorised";
 get(tokens_title) -> "Tokens";
 get(tokens_heading) -> "Tokens";
-get(candidate_search_title) -> "Candidate Info";
-get(candidate_search_heading) -> "Candidate Info";
+get(candidate_title) -> "Candidate";
+get(candidate_heading) -> "Candidate";
 get(candidate_add_title) -> "Candidate Addition";
 get(candidate_add_heading) -> "Candidate Addition";
-get(candidate_status_title) -> "Candidate List";
-get(candidate_status_heading) -> "Candidate List";
+get(candidate_status_title) -> "Candidate Status";
+get(candidate_status_heading) -> "Candidate Status";
 get(report_generate_title) -> "Results";
 get(report_generate_heading) -> "Results";
 get(instructions_title) -> "Instructions";
@@ -20,6 +20,7 @@ get(softwate_update_heading) -> "Software Update";
 get(session_duplicate_title) -> "Duplicate Session";
 get(session_duplicate_heading) -> "Duplicate Session";
 get(index_welcome) -> "Admin";
+get(index_heading) -> "Dashboard";
 get(videoresponse_title) -> "VideoResponse";
 get(videoresponse_heading) -> "VideoResponse";
 
@@ -34,13 +35,14 @@ get(active) -> "Active";
 get(completed) -> "Completed";
 get(retired) -> "Retired";
 get(yettostart) -> "Yet To Start";
+get(relogin) -> "Re-login";
 get(other) -> "Other";
 
 get(login) -> "Sign In";
 get(password_bcrypt) -> "Password";
 get(username) -> "Username";
 get(signin) -> "Sign In";
-get(footer_copyright) -> "(c) WeShineTech Pvt. Ltd., Pune";
+get(footer_copyright) -> "&copy; WeShineTech Pvt. Ltd., Pune";
 
 get(login_title) -> "Sign In";
 get(login_heading) -> "Sign In";
@@ -54,22 +56,24 @@ get(oeuserfullname) -> "Full Name";
 get(oeuseraddname) -> "Mother's Name";
 get(oeuserlogintimes) -> "# of logins";
 get(oeusertoken) -> "Token";
-get(oeusertimeleftseconds) -> "Time (secs)";
+get(oeusertimeleftseconds) -> "Time Remaining";
 get(oeuserscore) -> "Score";
 get(oeuserstarttime) -> "Start Time";
 get(oeuserendtime) -> "End Time";
 get(oeuserexamstate) -> "Exam State";
 get(oeuseraddreason) -> "Reason for Addition";
+get(oeuserips) -> "IPs";
 
 get(oe2test_title) -> "Test";
 get(oe2test_heading) -> "Test";
-get(testname) -> "Name";
+get(testname) -> "Test Name";
 get(testdescription) -> "Description";
 get(teststatus) -> "Status";
 get(testsactive) -> "Active Tests";
 get(testduration) -> "Duration (mins)";
 get(testdate) -> "Date";
 get(testmaxlogins) -> "Allowed Logins";
+get(oetestcourseid) -> "Course ID";
 
 get(optiona) -> "A";
 get(optionb) -> "B";
@@ -84,9 +88,10 @@ get(validator_nospaces) -> "Spaces Not Allowed";
 get(validator_alphanumeric) -> "Required Alphanumeric";
 
 get(login_failed) -> "Login failed.";
-get(login_failed_expired) -> "Login failed. Your test has ended.";
-get(login_failed_maxlogins) -> "Login failed. You have exceeded the number of allowed logins.";
-get(login_failed_password) -> "Login failed. Invalid password";
+get(login_failed_expired) -> "FAILED. Your test has ended.";
+get(login_failed_maxlogins) -> "FAILED. You have exceeded the number of allowed logins.";
+get(login_failed_password) -> "FAILED. Invalid password.";
+get(login_failed_active_contact_admin) -> "FAILED. Your have logged in before but did not submit test. You need to contact exam co-ordinator to relogin.";
 
 get(exam_title) -> "Online Examination";
 get(exam_heading) -> "Online Examination";
@@ -118,6 +123,11 @@ get(exam_timer_save_failed) -> "Could not save timer";
 get(exam_submit_test_min_appear) -> "You are required to attend this test for at least ~s minutes. You can submit test later.";
 get(exam_submit_test_min_appear_ok) -> "OK. Go back.";
 
+get(admin_exam_submit_test_confirm) -> "IMPORTANT: YOU CANNOT UNDO THIS OPERATION!\n\n\nAre you sure you want to submit test on behalf of the candidate?";
+get(admin_exam_submit_test_failed) -> "Submit failed";
+get(admin_exam_relogin_test) -> "Allow Re-Login";
+get(admin_exam_relogin_test_confirm) -> "IMPORTANT:\n\nAre you sure you want to allow this candidate to re-login?";
+
 get(instructions) -> "Instructions";
 get(instructions_click) -> "Instructions";
 get(instructions_login) -> "Sign In";
@@ -140,15 +150,16 @@ get(msg_unquthorised) -> "Unauthorised access to module.";
 get(msg_candidate_not_found) -> "Not found.";
 get(msg_online_exam_system) -> "Online Examination System";
 get(msg_index_welcome) -> "Welcome";
+get(msg_index_no_active_tests) -> "Currently there are no active tests";
 get(msg_total_questions) -> "Total Questions";
 get(msg_attempted_questions) -> "Attempted Questions";
 get(msg_unattempted_questions) -> "Un-attempted Questions";
 get(msg_generate_report_declare) -> "BY GENERATING RESULTS, I HEREBY DECLARE THAT:";
 get(msg_generate_report_declare_over) -> "(A) Examination at my center is completely over. Hereafter candidates will not be allowed to appear for the exam.";
 get(msg_generate_report_declare_sync) -> "(B) Examination data at my center has been copied/synced to main server completely.";
-get(msg_generate_report_error_active) -> "ERROR. Some candidates are still active";
+get(msg_generate_report_error_active) -> "Some candidates are still active. Please try later.";
 get(msg_generate_report_error_request_failed) -> "Failed to connect to main server";
-get(msg_generate_report_error_data_sync) -> "Data is not in sync with main server. Please contact exam co-ordinator immediately.";
+get(msg_generate_report_error_data_sync) -> "Data is not in sync with main server. Please contact exam co-ordinator.";
 get(msg_generate_report_error_data_sync_ex) -> "Could not parse main server response";
 get(msg_download) -> "Download";
 get(msg_print) -> "Print";
@@ -167,23 +178,28 @@ get(msg_please_wait) -> "Please wait ...";
 get(msg_software_version_stale) -> "You do not have latest software version. Click here to update";
 get(msg_absent) -> "Absent";
 get(msg_dashboard) -> "Dashboard";
+get(msg_status) -> "Status";
+get(msg_failed) -> "FAILED";
+get(msg_results) -> "Results";
+get(msg_generate_report_disabled) -> "Result generation is disabled for this test.";
 
 get(index_yettostart) -> "To Start";
 get(index_active) -> "Active";
 get(index_completed) -> "Completed";
 
-get(admin_link_home) -> "Home";
+get(admin_link_home) -> "Dashboard";
 get(admin_link_tokens) -> "Tokens";
 get(admin_link_candidate_add) -> "Candidate Addition";
 get(admin_link_candidate_search) -> "Candidate Info";
 get(admin_link_candidate_summary) -> "Status Summary";
 get(admin_link_candidate_status) -> "Candidate List";
-get(admin_link_report_generate) -> "Results";
+get(admin_link_report_generate) -> "Generate";
 get(admin_link_software_update) -> "Software Update";
 get(admin_link_logout) -> "Logout";
 
 get(oeuseraddreason_missing) -> "Missing";
 get(oeuseraddreason_sno_unassigned) -> "S.No. Unassigned";
+get(oeuseraddreason_retest) -> "Retest";
 
 get(Other) ->
 	helper:a2l(Other).

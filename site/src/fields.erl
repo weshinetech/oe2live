@@ -27,9 +27,9 @@ get(email = I) -> F = textbox(I), F#field {validators=[email]};
 get(testduration = I) -> F = textbox(I), F#field {validators=[integer]};
 get(oecentercode = I) -> textbox(I);
 get(oe_min_appear_minutes = I) -> F = textbox(I), F#field {validators=[integer]};
-get(oe_videoresponse_postid = I) -> F = textbox(I), F#field {validators=[]};
-get(oe_videoresponse_responseid = I) -> textbox(I);
 get(oecustomerid = I) -> textbox(I);
+get(oetestcourseid = I) -> textbox(I);
+get(negative_marking_percentage = I) -> F = textbox(I), F#field {validators=[percentage]};
 
 % textarea
 get(testdescription = I) -> textarea(I);
@@ -47,7 +47,7 @@ get(academic_branch = I) -> dropdown(I);
 get(academic_course_year = I) -> dropdown(I);
 get(academic_semester = I) -> dropdown(I);
 get(oe_report_invalid_enabled = I) -> dropdown(I);
-get(oe_videoresponse_response_state = I) -> dropdown(I);
+get(test_agent_result_generate = I) -> dropdown(I);
 
 % fixed
 get(profiletype = I) -> fixed(I);
@@ -103,6 +103,7 @@ get(oeusertimeleftseconds = I) -> textbox(I);
 get(oeuserexamstate = I) -> dropdown(I);
 get(oeuserscore = I) -> textbox(I);
 get(oeuseraddreason = I) -> dropdown(I);
+get(oeuserips = I) -> mylist2:get(I);
 
 % other
 get(_) -> undefined.

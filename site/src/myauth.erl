@@ -38,8 +38,11 @@ pageloaded(Page) ->
 	helper:session({pageloaded, Page}) == true.
 
 clear_session() ->
+	cache:session_id(myauth:username(), undefined),
 	username(undefined),
 	userfields(undefined),
+	testfields(undefined),
+	pageloaded(?MODULE, false),
 	role(undefined).
 
 is_authenticated() ->
@@ -58,8 +61,7 @@ oecentercode() ->
 ip() ->
 	case wf:peer_ip() of
 		{A, B, C, D} ->
-			string:join([helper:i2s(A), helper:i2s(B),
-				helper:i2s(C), helper:i2s(D)], ".");
+			io_lib:format("~p.~p.~p.~p", [A, B, C, D]);
 		_ ->
 			[]
 	end.

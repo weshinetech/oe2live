@@ -46,41 +46,49 @@ getusers_by_state(TestId) ->
 		case State of
 			?COMPLETED -> {AccY, AccA, AccC ++ [U]};
 			?YETTOSTART -> {AccY ++ [U], AccA, AccC};
-			?ACTIVE -> {AccY, AccA ++ [U], AccC}
+			?ACTIVE -> {AccY, AccA ++ [U], AccC};
+			?RELOGIN -> {AccY, AccA ++ [U], AccC}
 		end
 	end, {[], [], []}, Users),
 	{Y, A, C}.
 
 compute_scores(TestId, Users) ->
+	TestFs = oe2tests:get(TestId),
+	Negative = case fields:getuivalue(TestFs, negative_marking_percentage) of
+		[] -> 0;
+		V -> helper:s2i(V)
+	end,
 	Dict = questions:getdict(TestId),
-	NewUsers = lists:map(fun(U) -> compute_score(Dict, U) end, Users),
+	NewUsers = lists:map(fun(U) -> compute_score(Dict, U, Negative) end, Users),
 	?MODULE:updateall(?DB_USERS ++ TestId, NewUsers).
 
-compute_score(Dict, User) ->
+compute_score(Dict, User, Negative) ->
 	Answers = fields:find(User, oeuserqna),
 	ScoreList = lists:map(fun({Q, A}) ->
-		compute_score_question(Dict, Q, A)
+		compute_score_question(Dict, Q, A, Negative)
 	end, Answers#field.uivalue),
 	Score = lists:foldl(fun(S, Acc) ->
-		Acc + helper:s2n(S)
+		Acc + S
 	end, 0, ScoreList),
 	FScore = fields:get(oeuserscore),
 	NewUser = fields:delete(User, oeuserscore) ++ [FScore#field {uivalue=helper:n2s(Score)}],
 	NewUser.
 
-compute_score_question(Dict, Q, A) ->
+compute_score_question(Dict, Q, A, Negative) ->
 	case dict:find(Q, Dict) of
-		{ok, Fields} -> getscore(Fields, A);
+		{ok, Fields} -> getscore(Fields, A, Negative);
 		_ -> "0"
 	end.
 
-getscore(Fields, A) ->
-	Answer = fields:find(Fields, answer),
-	Marks = fields:find(Fields, marks),
-	case string:to_lower(Answer#field.uivalue) == string:to_lower(A) of
-		true -> Marks#field.uivalue;
-		false -> "0"
+getscore(Fields, A, Negative) ->
+	Answer = string:to_lower(fields:getuivalue(Fields, answer)),
+	Marks = float(helper:s2n(fields:getuivalue(Fields, marks))),
+	if
+		A == Answer -> Marks;
+		A == "0" -> 0.0;
+		true -> (Marks*Negative/100) * -1
 	end.
+
 
 candidate_addition([Test, #field {uivalue=SN},	#field {uivalue=FN}, #field {uivalue=AN}, #field {uivalue=RN}]) ->
 

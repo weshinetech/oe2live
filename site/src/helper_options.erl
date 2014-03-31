@@ -63,21 +63,24 @@ options(year) -> [
 options(oeuserexamstate) -> [
 	yettostart,
 	active,
+	relogin,
 	completed
 ];
 
 options(oeuseraddreason) -> [
 	oeuseraddreason_missing,
 	oeuseraddreason_sno_unassigned,
+	oeuseraddreason_retest,
 	other
 ];
 
-options(oe_videoresponse_response_state) -> [
-	oe_videoresponse_response_state_new,
-	oe_videoresponse_response_state_partial,
-	oe_videoresponse_response_state_completed
-];
+options(test_agent_result_generate) ->
+	yesno();
 
 options(Other) ->
 	helper:print(Other),
 	throw(optionlist_not_found).
+
+yesno() -> [
+	yes, no
+].

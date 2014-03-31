@@ -10,6 +10,7 @@
 -define(DB_QUESTIONS, "q_").
 -define(YETTOSTART, "yettostart").
 -define(COMPLETED, "completed").
+-define(RELOGIN, "relogin").
 
 -record(field, {
 	id,

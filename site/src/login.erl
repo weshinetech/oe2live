@@ -4,8 +4,8 @@
 -include_lib("nitrogen_core/include/wf.hrl").
 
 main() ->
-	wf:clear_session(),
 	myauth:clear_session(),
+	wf:clear_session(),
 	myauth:main(?MODULE).
 
 title() ->
@@ -39,8 +39,6 @@ fields() ->
 	[FU, FP, FT] = helper_ui:fields(?MODULE),
 	[FU#field{validators=[required]}, FP, FT].
 
-event({timer_flash, _} = E) ->
-	helper_ui:event(E);
 event(_) ->
 	[FUser, FPass, FTest] = fields:uivalue(helper_ui:fields(?MODULE)),
 	validateUser(oeusers:getuser(FTest#field.uivalue, FUser#field.uivalue), FPass#field.uivalue, FTest#field.uivalue).
@@ -64,38 +62,23 @@ validatePassword(_, _, _, _) ->
 
 validateTestState(_, undefined, _) ->
 	onloginfailed();
+validateTestState(_, #field {uivalue=?ACTIVE}, _) ->
+	onloginfailed(login_failed_active_contact_admin);
 validateTestState(_, #field {uivalue=?COMPLETED}, _) ->
 	onloginfailed(login_failed_expired);
 validateTestState(Fs, _, TestId) ->
-	validateLoginTimes(Fs, TestId).
+	TFs = oe2tests:get(TestId),
+	LoginTimes = helper:s2i(fields:finduival(Fs, oeuserlogintimes)),
+	MaxLogins = helper:s2i(fields:finduival(TFs, testmaxlogins)),
+	validateLoginTimes(Fs, TFs, LoginTimes, MaxLogins).
 
-validateLoginTimes(Fs, TestId) ->
-	TestFs = oe2tests:get(TestId),
-	MaxLogins = fields:finduival(TestFs, testmaxlogins),
-	UserLogins = fields:finduival(Fs, oeuserlogintimes),
-	case helper:s2i(UserLogins) >= helper:s2i(MaxLogins) of
-		true ->
-			F1 = fields:find(Fs, oeuserexamstate),
-			F2 = fields:find(Fs, oeuserendtime),
-			Fs1 = fields:delete(Fs, oeuserexamstate),
-			Fs2 = fields:delete(Fs1, oeuserendtime),
-			NewFs = Fs2 ++ [
-				F1#field {uivalue=?COMPLETED}, 
-				F2#field {uivalue=helper:i2s(helper:epochtime())}
-			],
-			oeusers:update(?DB_USERS ++ TestId, NewFs),
-			onloginfailed(login_failed_maxlogins);
-		false ->
-			FUser = fields:find(Fs, '_id'),
-			myauth:username(FUser#field.uivalue),
-			myauth:userfields(Fs),
-			myauth:testfields(TestFs),
-			myauth:role("candidate"),
-			cache:session_id(myauth:username(), wf:session_id()),
-			handle_app_redirect(fields:finduival(Fs, oe_videoresponse_response_state))
-	end.
-
-handle_app_redirect([]) ->
-	helper:redirect("/exam");
-handle_app_redirect(_) ->
-	helper:redirect("/videoresponse").
+validateLoginTimes(_, _, LoginTimes, MaxLogins) when LoginTimes >= MaxLogins ->
+	onloginfailed(login_failed_maxlogins);
+validateLoginTimes(Fs, TFs, _, _) ->
+	UId = fields:getuivalue(Fs, '_id'),
+	myauth:username(UId),
+	myauth:userfields(Fs),
+	myauth:testfields(TFs),
+	myauth:role("candidate"),
+	cache:session_id(myauth:username(), wf:session_id()),
+	helper:redirect("/exam").

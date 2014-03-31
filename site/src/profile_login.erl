@@ -54,7 +54,7 @@ validateUser(Fs, Password) ->
 validatePassword(Fs, #field {uivalue=PasswordBcrypt}, Password) ->
 	case {ok, PasswordBcrypt} =:= bcrypt:hashpw(Password, PasswordBcrypt) of
 		true ->
-			FUser = fields:find(Fs, '_id'),
+			FUser = fields:find(Fs, 'username'),
 			Role = fields:find(Fs, profiletype),
 			myauth:username(FUser#field.uivalue),
 			myauth:role(Role#field.uivalue),

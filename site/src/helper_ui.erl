@@ -3,6 +3,9 @@
 -include_lib("nitrogen_core/include/wf.hrl").
 -include_lib("records.hrl").
 
+%-----------------------------------------------------------------------------------------------
+% FLASH
+%-----------------------------------------------------------------------------------------------
 flash({ok, _}) ->
 	flash(success, locale:get(success));
 flash({error, _}) ->
@@ -28,9 +31,9 @@ getflashelement(Id, _, Text) ->
 flash_element() ->
 	#panel {id=myalert, class="myalert", body=[]}.
 
-event({timer_flash, Id}) ->
-	wf:remove(Id).
-
+%-----------------------------------------------------------------------------------------------
+% HELPERS
+%-----------------------------------------------------------------------------------------------
 fields(Md) ->
 	fields(Md, []).
 
@@ -84,3 +87,26 @@ tmpid(Module, Id) ->
 	helper:l2a(helper:a2l(Module) ++ Id).
 
 space() -> "<pre> </pre>".
+
+oe2version() ->
+	"Version: " ++ configs:get(oe2version).
+
+print_button() ->
+	"<button class='btn btn-primary hidden-print mylabel' onclick='window.print();'>Print</button>".
+
+download_button() ->
+	#button {class="btn btn-primary hidden-print mylabel", postback=download, text=locale:get(msg_download)}.
+
+%-----------------------------------------------------------------------------------------------
+% FULL PAGE
+%-----------------------------------------------------------------------------------------------
+fullpage(E) ->
+	Module = wf:page_module(),
+	Heading = case wf:q(mode) of
+		undefined -> Module:heading();
+		Mode -> io_lib:format("~s (~s)", [Module:heading(), string:to_upper(Mode)])
+	end,
+	[#h4 {text=Heading}, #hr {}, E].
+%-----------------------------------------------------------------------------------------------
+% END
+%-----------------------------------------------------------------------------------------------

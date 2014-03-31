@@ -37,6 +37,7 @@ js:
 	cat $(NITROGEN)/livevalidation.js >> $(NITROGEN)/lib.js
 	cat $(NITROGEN)/nitrogen.min.js >> $(NITROGEN)/lib.js
 	cat $(NITROGEN)/bert.min.js >> $(NITROGEN)/lib.js
+	cat $(NITROGEN)/../bootstrap/js/bootstrap.min.js >> $(NITROGEN)/lib.js
 
 css:
 	cat /dev/null > $(NITROGEN)/lib.css

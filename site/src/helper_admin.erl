@@ -3,29 +3,14 @@
 -include_lib("nitrogen_core/include/wf.hrl").
 -include_lib("records.hrl").
 
-layout(Mod) -> [
-	layout:g(2, links()),
-	layout:g(10, Mod:layout(Mod))
-].
-
 links() ->
-	#panel {class="mysidebar", body=[
+	#panel {body=[
 		#br{},
 		#span {class="mylabel", text="LINKS"},
 		#br{},
 		#link {class="mylabel", url="/index", text=locale:get(admin_link_home)},
 		#br{},
-		#link {class="mylabel", url="/tokens", text=locale:get(admin_link_tokens)},
-		#br{},
 		#link {class="mylabel", url="/candidate_add", text=locale:get(admin_link_candidate_add)},
-		#br{},
-		#link {class="mylabel", url="/candidate_search", text=locale:get(admin_link_candidate_search)},
-		#br{},
-		#link {class="mylabel", url="/candidate_status", text=locale:get(admin_link_candidate_status)},
-		#br{},
-		#link {class="mylabel", url="/report_generate", text=locale:get(admin_link_report_generate)},
-		#br{},
-		#link {class="mylabel", url="/software_update", text=locale:get(admin_link_software_update)},
 		#br{},
 		#link {class="mylabel", url="/profile_login", text=locale:get(admin_link_logout)}
 	]}.
@@ -38,3 +23,29 @@ layout_oeuser_rows(Users, Ids, Type) ->
 
 layout_oeuser_header(Ids) ->
 	layout:table_header(Ids, 1).
+
+menu() ->
+	menu_1(myauth:role()).
+
+menu_1(Role) when Role == "oestaff"; Role == "admin" ->
+	Html = "<div class='nav pull-right admin-menu hidden-print'>
+				<li class='dropdown'>
+					<a data-toggle='dropdown' href='#' class='dropdown-toggle'>
+						<span class='mylabel label label-default'>~s</span><i class='pull-right icon-chevron-down'></i>
+					</a>
+					<ul role='menu' class='dropdown-menu clear-fix'>
+						<li><a href='/index'>~s</a></li>
+						<li><a href='/candidate_add'>~s</a></li>
+						<li><a href='/profile_login'>~s</a></li>
+					</ul>
+				</li>
+			</div>",
+	lists:flatten(io_lib:format(Html, [
+		myauth:username(),
+		locale:get(admin_link_home),
+		locale:get(admin_link_candidate_add),
+		locale:get(admin_link_logout)
+	]));
+
+menu_1(_) ->
+	[].

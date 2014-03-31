@@ -17,11 +17,18 @@ wire(true, Id, Action, Validators) ->
 % textbox
 get(textbox) ->
 	fun(Md, Ac, #field {id=I, uivalue=V, postback=P, label=L, validators=Va}) ->
+		Page = wf:page_module(),
 		{Validate, FE} = if 
 			Md == ?VIEW, I == oeuserstarttime ->
 				{false, #span {text=helper:epochtimetostring(helper:s2i(V))}};
 			Md == ?VIEW, I == oeuserendtime ->
 				{false, #span {text=helper:epochtimetostring(helper:s2i(V))}};
+			Md == ?VIEW, I == oeusertimeleftseconds ->
+				Secs = helper:s2i(V),
+				{false, io_lib:format("~pm, ~ps", [(Secs div 60), (Secs rem 60)])};
+			Md == ?VIEW, I == oeuserseatnumber, Page == candidate_status ->
+				Url = io_lib:format("<a class='hidden-print' target='_blank' href='/candidate?oetestid=~s&oeuserseatnumber=~s'>~s</a><span class='visible-print'>~s</span>", [wf:q(oetestid), V, V, V]),
+				{false, Url};
 			Md == ?VIEW ->
 				{false, #span {text=V}};
 			true ->

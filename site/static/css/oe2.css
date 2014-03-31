@@ -278,3 +278,23 @@ body {
 table.myfixedwidthtable {
 	table-layout: fixed;
 }
+
+.oeusertoken {
+	font-family: "Courier";
+	font-weight: bold;
+}
+
+@media print {
+	body {
+		font-size: 10px;
+	}
+}
+
+.admin-menu {
+	height: auto;
+	background-color: #ffffff;
+	border: solid 1px black;
+	padding: 2px;
+	font-size: 110%;
+	text-align: left;
+}
