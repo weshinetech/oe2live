@@ -9,7 +9,7 @@
                         configs,db,dh_date,download,en,events,exam,export,
                         fields,helper,helper_access,helper_admin,helper_api,
                         helper_options,helper_ui,index,instructions,layout,
-                        locale,login,my_dynamic_route_handler,my_images,
+                        locale,log,login,my_dynamic_route_handler,my_images,
                         myauth,mylist,mylist2,nitrogen_app,nitrogen_inets,
                         nitrogen_sup,oe2test,oe2tests,oeusers,profile_login,
                         profiles,questions,renderer,report_generate,

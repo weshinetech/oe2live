@@ -12,6 +12,7 @@ main() ->
 	handlePageReload(myauth:pageloaded(?MODULE)).
 
 handlePageReload(true) ->
+	log(info, handlePageReload, true),
 	helper:redirect("/login");
 handlePageReload(false) ->
 	myauth:main(?MODULE).
@@ -52,6 +53,7 @@ loop_timer(TimeLeft) when TimeLeft < 1 ->
 	endexam(0);
 loop_timer(TimeLeft) ->
 	try
+		log(info, loop_timer, TimeLeft),
 		Interval = 60,
 		wf:update(exam_timer, layout_timer(TimeLeft)),
 		wf:flush(),
@@ -59,7 +61,11 @@ loop_timer(TimeLeft) ->
 		save_timer(TimeLeft - Interval),
 		loop_timer(TimeLeft - Interval)
 	catch
-		_:_ -> helper:redirect("/login")
+		X:Y ->
+			log(exception, loop_timer, TimeLeft),
+			log(exception, loop_timer, X),
+			log(exception, loop_timer, Y),
+			helper:redirect("/login")
 	end.
 
 %---------------------------------------------------------------------------------------------------
@@ -357,7 +363,7 @@ initexam(?RELOGIN) ->
 	end, [], myauth:userfields()),
 	save_user(NewFs);
 initexam(Other) ->
-	helper:print("error: initexam -> ~p", [Other]),
+	log(error, initexam, Other),
 	helper:redirect("/login").
 
 endexam() ->
@@ -374,6 +380,7 @@ endexam(TimeLeft) ->
 		Acc ++ [NewF]
 	end, [], myauth:userfields()),
 	save_user(NewFs),
+	log(info, endexam, TimeLeft),
 	helper:redirect("/login").
 
 increment_logintimes(Times) -> helper:i2s(helper:s2i(Times) + 1).
@@ -451,6 +458,9 @@ qid(Index) ->
 	{Id, _} = lists:nth(Index, getuservalue(oeuserqna)),
 	Id.
 
+log(Status, Type, Response) ->
+	Log = io_lib:format("~p, ~s, ~p, ~p", [Status, myauth:username(), Type, Response]),
+	log:log(Log).
 %---------------------------------------------------------------------------------------------------
 % SAVE TO DB
 %---------------------------------------------------------------------------------------------------
@@ -503,19 +513,22 @@ on_save_option({ok, Doc}) ->
 	myauth:userfields(helper_api:doc2fields({ok, Doc})),
 	{_, O} = lists:nth(helper:state(questionindex), getuservalue(oeuserqna)),
 	helper_ui:flash(success, io_lib:format(locale:get(exam_option_save_success), [getoptiondisplay(O), helper:state(questionindex)]));
-on_save_option(_) ->
+on_save_option(Res) ->
+	log(error, on_save_option, Res),
 	helper:redirect("/login").
 
 on_save_marker({ok, Doc}) ->
 	myauth:userfields(helper_api:doc2fields({ok, Doc})),
 	updatequestion();
-on_save_marker(_) ->
+on_save_marker(Res) ->
+	log(error, on_save_marker, Res),
 	helper:redirect("/login").
 
 on_save_reported({ok, Doc}) ->
 	myauth:userfields(helper_api:doc2fields({ok, Doc})),
 	updatequestion();
-on_save_reported(_) ->
+on_save_reported(Res) ->
+	log(error, on_save_reported, Res),
 	helper:redirect("/login").
 
 on_clear_option({noop, _}) ->
@@ -524,17 +537,20 @@ on_clear_option({ok, Doc}) ->
 	myauth:userfields(helper_api:doc2fields({ok, Doc})),
 	updatequestion(),
 	helper_ui:flash(warning, io_lib:format(locale:get(exam_option_clear_success), [helper:state(questionindex)]));
-on_clear_option(_) ->
+on_clear_option(Res) ->
+	log(error, on_clear_option, Res),
 	helper:redirect("/login").
 
 on_save_timer({ok, Doc}) ->
 	myauth:userfields(helper_api:doc2fields({ok, Doc}));
-on_save_timer(_) ->
+on_save_timer(Res) ->
+	log(error, on_save_timer, Res),
 	helper:redirect("/login").
 
 on_initexam({ok, Doc}) ->
 	myauth:userfields(helper_api:doc2fields({ok, Doc}));
-on_initexam(_) ->
+on_initexam(Res) ->
+	log(error, on_initexam, Res),
 	helper:redirect("/login").
 
 %---------------------------------------------------------------------------------------------------
