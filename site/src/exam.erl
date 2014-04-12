@@ -33,6 +33,8 @@ brand(customer_image) ->
 	end.
 
 layout() ->
+	MyServer = spawn(?MODULE, myserver, [myauth:testfields(), myauth:userfields()]),
+	helper:state(myserver, MyServer),
 	on_initexam(initexam()),
 	myauth:pageloaded(?MODULE, true),
 	helper:state(questionindex, 1),
@@ -47,24 +49,50 @@ layout() ->
 	Body.
 
 %---------------------------------------------------------------------------------------------------
+% MYSERVER
+%---------------------------------------------------------------------------------------------------
+myserver(T, U) ->
+	receive
+		{Client, save, Tuples} ->
+			NU = lists:foldl(fun({K, V}, Acc) ->
+				F = fields:get(K),
+				fields:delete(Acc, K) ++ [F#field {uivalue=V}]
+			end, U, Tuples),
+			Response = oeusers:update(?DB_USERS ++ fields:getuivalue(T, '_id'), NU),
+			Client ! {response_save, Response},
+			case Response of
+				{ok, _} -> myserver(T, helper_api:doc2fields(Response));
+				_ -> myserver(T, U)
+			end;
+		{Client, get, Id} ->
+			Client ! {response_get, fields:getuivalue(U, Id)},
+			myserver(T, U)
+	after 10*60*1000 ->
+		log:log("myserver, exit, idle for 10 minutes")
+	end.
+
+%---------------------------------------------------------------------------------------------------
 % TIMERS
 %---------------------------------------------------------------------------------------------------
 loop_timer(TimeLeft) when TimeLeft < 1 ->
 	endexam(0);
 loop_timer(TimeLeft) ->
 	try
-		log(info, loop_timer, TimeLeft),
-		Interval = 60,
-		wf:update(exam_timer, layout_timer(TimeLeft)),
-		wf:flush(),
-		timer:sleep(Interval*1000),
-		save_timer(TimeLeft - Interval),
-		loop_timer(TimeLeft - Interval)
+		case myauth:username() of
+			undefined ->
+				ok;
+			_ ->
+				log(info, loop_timer, TimeLeft),
+				Interval = 60,
+				wf:update(exam_timer, layout_timer(TimeLeft)),
+				wf:flush(),
+				timer:sleep(Interval*1000),
+				save_timer(TimeLeft - Interval),
+				loop_timer(TimeLeft - Interval)
+		end
 	catch
 		X:Y ->
-			log(exception, loop_timer, TimeLeft),
-			log(exception, loop_timer, X),
-			log(exception, loop_timer, Y),
+			log(exception, loop_timer, lists:flatten(io_lib:format("~p ~p ~p", [TimeLeft, X, Y]))),
 			helper:redirect("/login")
 	end.
 
@@ -274,7 +302,7 @@ actions_right() ->
 event(Any) ->
 	case wf:session_id() == cache:session_id(myauth:username()) of
 		true -> myevent(Any);
-		false -> helper:redirect("/session_duplicate")
+		false -> helper:redirect("/login")
 	end.
 
 myevent(exam_questions_list) ->
@@ -340,28 +368,18 @@ initexam() ->
 	initexam(getuservalue(oeuserexamstate)).
 
 initexam(?YETTOSTART) ->
-	NewFs = lists:foldl(fun(F, Acc) ->
-		NewF = case F#field.id of
-			oeuserexamstate -> F#field {uivalue="active"};
-			oeuserstarttime -> F#field {uivalue=helper:i2s(helper:epochtime())};
-			oeuserlogintimes -> F#field {uivalue=increment_logintimes(getuservalue(F#field.id))};
-			_ -> F
-		end,
-		Acc ++ [NewF]
-	end, [], myauth:userfields()),
-	FIPs = fields:get(oeuserips),
-	save_user(NewFs ++ [FIPs#field {uivalue=append_ip([])}]);
+	save([
+		{oeuserexamstate, "active"},
+		{oeuserstarttime, helper:i2s(helper:epochtime())},
+		{oeuserlogintimes, increment_logintimes(getuservalue(oeuserlogintimes))},
+		{oeuserips, append_ip([])}
+	]);
 initexam(?RELOGIN) ->
-	NewFs = lists:foldl(fun(F, Acc) ->
-		NewF = case F#field.id of
-			oeuserexamstate -> F#field {uivalue="active"};
-			oeuserlogintimes -> F#field {uivalue=increment_logintimes(getuservalue(F#field.id))};
-			oeuserips -> F#field {uivalue=append_ip(getuservalue(F#field.id))};
-			_ -> F
-		end,
-		Acc ++ [NewF]
-	end, [], myauth:userfields()),
-	save_user(NewFs);
+	save([
+		{oeuserexamstate, "active"},
+		{oeuserlogintimes, increment_logintimes(getuservalue(oeuserlogintimes))},
+		{oeuserips, append_ip(getuservalue(oeuserips))}
+	]);
 initexam(Other) ->
 	log(error, initexam, Other),
 	helper:redirect("/login").
@@ -370,16 +388,11 @@ endexam() ->
 	endexam(helper:s2i(getuservalue(oeusertimeleftseconds))).
 
 endexam(TimeLeft) ->
-	NewFs = lists:foldl(fun(F, Acc) ->
-		NewF = case F#field.id of
-			oeuserexamstate -> F#field {uivalue="completed"};
-			oeuserendtime -> F#field {uivalue=helper:i2s(helper:epochtime())};
-			oeusertimeleftseconds -> F#field {uivalue=helper:i2s(TimeLeft)};
-			_ -> F
-		end,
-		Acc ++ [NewF]
-	end, [], myauth:userfields()),
-	save_user(NewFs),
+	save([
+		{oeuserexamstate, "completed"},
+		{oeuserendtime, helper:i2s(helper:epochtime())},
+		{oeusertimeleftseconds, helper:i2s(TimeLeft)}
+	]),
 	log(info, endexam, TimeLeft),
 	helper:redirect("/login").
 
@@ -388,9 +401,20 @@ increment_logintimes(Times) -> helper:i2s(helper:s2i(Times) + 1).
 append_ip(List) ->	List ++ [{helper:epochtimetostring(helper:epochtime()), myauth:ip()}].
 
 getuservalue(Type) ->
-	Fs = myauth:userfields(),
-	F = fields:find(Fs, Type),
-	F#field.uivalue.
+	MyServer = helper:state(myserver),
+	case MyServer of
+		undefined ->
+			Fs = myauth:userfields(),
+			fields:getuivalue(Fs, Type);
+		_ ->
+			MyServer ! {self(), get, Type},
+			receive
+				{response_get, Response} ->
+					Response
+			after 10000 ->
+				{error, timedout}
+			end
+	end.
 
 gettestvalue(Type) ->
 	Fs = myauth:testfields(),
@@ -465,11 +489,9 @@ log(Status, Type, Response) ->
 % SAVE TO DB
 %---------------------------------------------------------------------------------------------------
 save_option(QuestionId, OptionId) ->
-	Fs = myauth:userfields(),
-	FQnA = fields:find(Fs, oeuserqna),
-	NewQnA = lists:keystore(QuestionId, 1, FQnA#field.uivalue, {QuestionId, getoptionvalue(OptionId)}),
-	NewFs = fields:delete(Fs, oeuserqna) ++ [FQnA#field {uivalue=NewQnA}],
-	save_user(NewFs).
+	FQnA = getuservalue(oeuserqna),
+	NewQnA = lists:keystore(QuestionId, 1, FQnA, {QuestionId, getoptionvalue(OptionId)}),
+	save([{oeuserqna, NewQnA}]).
 
 clear_option() ->
 	case lists:nth(helper:state(questionindex), getuservalue(oeuserqna)) of
@@ -479,53 +501,50 @@ clear_option() ->
 
 save_marker() ->
 	QuestionId = qid(),
-	Fs = myauth:userfields(),
-	FMarkers = fields:find(Fs, oeusermarkers),
+	FMarkers = getuservalue(oeusermarkers),
 	Marker = helper:a2l(not is_question_bookmarked()),
-	NewMarkers = lists:keystore(QuestionId, 1, FMarkers#field.uivalue, {QuestionId, Marker}),
-	NewFs = fields:delete(Fs, oeusermarkers) ++ [FMarkers#field {uivalue=NewMarkers}],
-	save_user(NewFs).
+	NewMarkers = lists:keystore(QuestionId, 1, FMarkers, {QuestionId, Marker}),
+	save([{oeusermarkers, NewMarkers}]).
 
 save_reported() ->
 	QuestionId = qid(),
-	Fs = myauth:userfields(),
-	FReported = fields:find(Fs, oeuserreported),
+	FReported = getuservalue(oeuserreported),
 	Reported = helper:a2l(not is_question_reported()),
-	NewReported = lists:keystore(QuestionId, 1, FReported#field.uivalue, {QuestionId, Reported}),
-	NewFs = fields:delete(Fs, oeuserreported) ++ [FReported#field {uivalue=NewReported}],
-	save_user(NewFs).
+	NewReported = lists:keystore(QuestionId, 1, FReported, {QuestionId, Reported}),
+	save([{oeuserreported, NewReported}]).
 
 save_timer(TimeLeftSeconds) when TimeLeftSeconds < 0 ->
 	endexam(0);
 save_timer(TimeLeftSeconds) ->
-	Fs = myauth:userfields(),
-	TimeLeft = fields:find(Fs, oeusertimeleftseconds),
-	on_save_timer(save_user(fields:delete(Fs, oeusertimeleftseconds) ++ [TimeLeft#field {uivalue=helper:i2s(TimeLeftSeconds)}])).
+	on_save_timer(save([{oeusertimeleftseconds, helper:i2s(TimeLeftSeconds)}])).
 
-save_user(Fs) ->
-	TestId = gettestvalue('_id'),
-	oeusers:update(?DB_USERS ++ TestId, Fs).
+
+save(Tuples) ->
+	helper:state(myserver) ! {self(), save, Tuples},
+	receive
+		{response_save, Response} ->
+			Response
+	after 10000 ->
+		{error, timedout}
+	end.
 
 %---------------------------------------------------------------------------------------------------
 % ON SAVE
 %---------------------------------------------------------------------------------------------------
-on_save_option({ok, Doc}) ->
-	myauth:userfields(helper_api:doc2fields({ok, Doc})),
+on_save_option({ok, _}) ->
 	{_, O} = lists:nth(helper:state(questionindex), getuservalue(oeuserqna)),
 	helper_ui:flash(success, io_lib:format(locale:get(exam_option_save_success), [getoptiondisplay(O), helper:state(questionindex)]));
 on_save_option(Res) ->
 	log(error, on_save_option, Res),
 	helper:redirect("/login").
 
-on_save_marker({ok, Doc}) ->
-	myauth:userfields(helper_api:doc2fields({ok, Doc})),
+on_save_marker({ok, _}) ->
 	updatequestion();
 on_save_marker(Res) ->
 	log(error, on_save_marker, Res),
 	helper:redirect("/login").
 
-on_save_reported({ok, Doc}) ->
-	myauth:userfields(helper_api:doc2fields({ok, Doc})),
+on_save_reported({ok, _}) ->
 	updatequestion();
 on_save_reported(Res) ->
 	log(error, on_save_reported, Res),
@@ -533,22 +552,21 @@ on_save_reported(Res) ->
 
 on_clear_option({noop, _}) ->
 	ok;
-on_clear_option({ok, Doc}) ->
-	myauth:userfields(helper_api:doc2fields({ok, Doc})),
+on_clear_option({ok, _}) ->
 	updatequestion(),
 	helper_ui:flash(warning, io_lib:format(locale:get(exam_option_clear_success), [helper:state(questionindex)]));
 on_clear_option(Res) ->
 	log(error, on_clear_option, Res),
 	helper:redirect("/login").
 
-on_save_timer({ok, Doc}) ->
-	myauth:userfields(helper_api:doc2fields({ok, Doc}));
+on_save_timer({ok, _}) ->
+	ok;
 on_save_timer(Res) ->
 	log(error, on_save_timer, Res),
 	helper:redirect("/login").
 
-on_initexam({ok, Doc}) ->
-	myauth:userfields(helper_api:doc2fields({ok, Doc}));
+on_initexam({ok, _}) ->
+	ok;
 on_initexam(Res) ->
 	log(error, on_initexam, Res),
 	helper:redirect("/login").

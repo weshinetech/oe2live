@@ -31,13 +31,13 @@ db(DbName) ->
 save(DbName, Doc) ->
 	case couchbeam:save_doc(db(DbName), Doc) of
 		{ok, SavedDoc} -> {ok, SavedDoc};
-		_ -> {error, save_failed}
+		ErrResponse -> {error, ErrResponse}
 	end.
 
 savebulk(DbName, Docs) ->
 	case couchbeam:save_docs(db(DbName), Docs) of
 		{ok, SavedDocs} -> {ok, SavedDocs};
-		_ -> {error, save_failed}
+		ErrResponse -> {error, ErrResponse}
 	end.
 
 get(_, []) ->
@@ -47,7 +47,7 @@ get(_, undefined) ->
 get(DbName, Id) ->
 	case couchbeam:open_doc(db(DbName), Id) of
 		{ok, Doc} -> {ok, Doc};
-		_ -> {error, get_failed}
+		ErrResponse -> {error, ErrResponse}
 	end.
 
 getdocs(DbName) ->
