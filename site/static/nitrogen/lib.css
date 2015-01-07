@@ -369,11 +369,6 @@ body {
 	border-radius: 15px;
 }
 
-.exam_timer_element {
-	padding: 5px;
-	font-size: 16px;
-}
-
 .mylabel {
 	padding: 5px;
 	margin-right: 10px;
@@ -406,13 +401,13 @@ body {
 	position:absolute;
 	top:0;
 	left:0;
+	width: 100%;
 }
 .myalert > div {
-	width:100%;
+	width:30%;
 	text-align: center;
-	position:fixed;
 	z-index:9999;
-	margin:0px;
+	margin:0 auto;
 }
 
 .mycenter {
@@ -483,4 +478,18 @@ table.myfixedwidthtable {
 	padding: 2px;
 	font-size: 110%;
 	text-align: left;
+}
+
+.ex_element {
+	padding: 10px;
+}
+
+#ex_mins, #ex_secs {
+	padding: 5px;
+	font-size: 32px;
+	line-height: 100%;
+}
+
+.nav_left {
+	padding: 5px;
 }
