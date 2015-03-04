@@ -2,6 +2,7 @@ WstTimer = {};
 WstTimer.secondsleft = 0;
 WstTimer.prevDateNow = 0;
 WstTimer.dateNowCheck = 1;
+WstTimer.prevApiEventSecs = 0;;
 
 WstTimer.onTimeOut = function () {
 	var SecondsToDeduct = 1;
@@ -13,8 +14,9 @@ WstTimer.onTimeOut = function () {
 	if (WstTimer.secondsleft < 1) {
 		window.clearInterval(WstTimer.TimerId);
 	}
-	if ((WstTimer.secondsleft % 60 == 0) || (WstTimer.secondsleft < 0)) {
+	if ((WstTimer.secondsleft % 60 == 0) || (WstTimer.secondsleft < 0) || ((WstTimer.prevApiEventSecs - WstTimer.secondsleft) > 60)) {
 		page.timer_minute(WstTimer.secondsleft);
+		WstTimer.prevApiEventSecs = WstTimer.secondsleft;
 	}
 
 	WstTimer.updateElement();
@@ -29,6 +31,7 @@ WstTimer.start = function (secondsleft) {
 	WstTimer.secondsleft = secondsleft;
 	WstTimer.TimerId = window.setInterval(WstTimer.onTimeOut, 1000);
 	WstTimer.prevDateNow = Date.now();
+	WstTimer.prevApiEventSecs = WstTimer.secondsleft;
 };
 
 WstTimer.updateElement = function () {
