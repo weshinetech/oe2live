@@ -1,8 +1,15 @@
 WstTimer = {};
 WstTimer.secondsleft = 0;
+WstTimer.prevDateNow = 0;
+WstTimer.dateNowCheck = 1;
 
 WstTimer.onTimeOut = function () {
-	WstTimer.secondsleft = WstTimer.secondsleft - 1;
+	var SecondsToDeduct = 1;
+	if ((WstTimer.prevDateNow > 0) && (WstTimer.dateNowCheck % 10 == 0)) {
+		SecondsToDeduct = Math.abs(Math.floor((Date.now() - WstTimer.prevDateNow)/1000)) - WstTimer.dateNowCheck;
+	}
+	WstTimer.secondsleft = WstTimer.secondsleft - SecondsToDeduct;
+	WstTimer.dateNowCheck = WstTimer.dateNowCheck + SecondsToDeduct;
 	if (WstTimer.secondsleft < 1) {
 		window.clearInterval(WstTimer.TimerId);
 	}
@@ -21,6 +28,7 @@ WstTimer.unload = function () {
 WstTimer.start = function (secondsleft) {
 	WstTimer.secondsleft = secondsleft;
 	WstTimer.TimerId = window.setInterval(WstTimer.onTimeOut, 1000);
+	WstTimer.prevDateNow = Date.now();
 };
 
 WstTimer.updateElement = function () {
