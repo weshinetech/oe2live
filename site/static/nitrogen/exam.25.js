@@ -61,3 +61,13 @@ function mouseDown(e) {
 	}
 }
 function RightMouseDown() {return false;}
+
+// warn before page refresh
+window.onbeforeunload = function(e) {
+	page.timer_minute(WstTimer.secondsleft);
+	e = e || window.event;
+	var message = "If you reload, you will be logged out and your exam will be interrupted.\n";
+	if (e)
+		e.returnValue = message;
+	return message;
+}
