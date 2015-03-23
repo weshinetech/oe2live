@@ -6,9 +6,9 @@ WstTimer.prevApiEventSecs = 0;;
 
 WstTimer.onTimeOut = function () {
 	var SecondsToDeduct = 1;
-	if ((WstTimer.prevDateNow > 0) && (WstTimer.dateNowCheck % 10 == 0)) {
-		SecondsToDeduct = Math.abs(Math.abs(Math.floor((Date.now() - WstTimer.prevDateNow)/1000)) - WstTimer.dateNowCheck);
-	}
+	// if ((WstTimer.prevDateNow > 0) && (WstTimer.dateNowCheck % 10 == 0)) {
+	// 	SecondsToDeduct = Math.abs(Math.abs(Math.floor((Date.now() - WstTimer.prevDateNow)/1000)) - WstTimer.dateNowCheck);
+	// }
 	WstTimer.secondsleft = WstTimer.secondsleft - SecondsToDeduct;
 	WstTimer.dateNowCheck = WstTimer.dateNowCheck + SecondsToDeduct;
 	if (WstTimer.secondsleft < 1) {
