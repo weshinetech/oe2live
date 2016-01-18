@@ -6,13 +6,13 @@ WstTimer.prevApiEventSecs = 0;;
 
 WstTimer.onTimeOut = function () {
 	var SecondsToDeduct = 1;
-	if ((WstTimer.prevDateNow > 0) && (WstTimer.dateNowCheck % 10 == 0)) {
-		var Diffseconds = (Date.now() - WstTimer.prevDateNow) / 1000 | 0;
-		if (Diffseconds < 0) Diffseconds = Diffseconds * -1;
+	// if ((WstTimer.prevDateNow > 0) && (WstTimer.dateNowCheck % 10 == 0)) {
+	// 	var Diffseconds = (Date.now() - WstTimer.prevDateNow) / 1000 | 0;
+	// 	if (Diffseconds < 0) Diffseconds = Diffseconds * -1;
 
-		SecondsToDeduct = Diffseconds - WstTimer.dateNowCheck;
-		if (SecondsToDeduct < 0) SecondsToDeduct = SecondsToDeduct * -1;
-	}
+	// 	SecondsToDeduct = Diffseconds - WstTimer.dateNowCheck;
+	// 	if (SecondsToDeduct < 0) SecondsToDeduct = SecondsToDeduct * -1;
+	// }
 	WstTimer.secondsleft = WstTimer.secondsleft - SecondsToDeduct;
 	WstTimer.dateNowCheck = WstTimer.dateNowCheck + SecondsToDeduct;
 	if (WstTimer.secondsleft < 1) {
