@@ -4,6 +4,36 @@ WstTimer.prevDateNow = 0;
 WstTimer.dateNowCheck = 1;
 WstTimer.prevApiEventSecs = 0;;
 
+
+//
+// start testing 
+//
+
+WstTesting = {};
+WstTesting.isTestingOn = false;
+WstTesting.start = function () {
+	WstTesting.isTestingOn = true;
+};
+
+WstTesting.doTest = function () {
+	if (WstTesting.isTestingOn) {
+		if (WstTimer.secondsleft % 5 == 0) {
+			Index = Math.floor(Math.random() * 4) + 0 ;
+			$(".radio")[Index].click();
+		}
+
+		if (WstTimer.secondsleft % 7 == 0) {
+			Index = Math.floor(Math.random() * 4) + 0 ;
+			$("a")[Index].click();
+		}
+	}
+};
+
+//
+// end testing 
+//
+
+
 WstTimer.onTimeOut = function () {
 	var SecondsToDeduct = 1;
 	// if ((WstTimer.prevDateNow > 0) && (WstTimer.dateNowCheck % 10 == 0)) {
@@ -22,6 +52,11 @@ WstTimer.onTimeOut = function () {
 		page.timer_minute(WstTimer.secondsleft);
 		WstTimer.prevApiEventSecs = WstTimer.secondsleft;
 	}
+
+	//
+	// test if enabled
+	//
+	WstTesting.doTest();
 
 	WstTimer.updateElement();
 };
