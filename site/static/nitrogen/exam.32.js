@@ -6,7 +6,7 @@ WstTimer.prevApiEventSecs = 0;;
 
 
 //
-// start testing 
+// start testing
 //
 
 WstTesting = {};
@@ -30,7 +30,7 @@ WstTesting.doTest = function () {
 };
 
 //
-// end testing 
+// end testing
 //
 
 
@@ -48,7 +48,7 @@ WstTimer.onTimeOut = function () {
 	if (WstTimer.secondsleft < 1) {
 		window.clearInterval(WstTimer.TimerId);
 	}
-	if ((WstTimer.secondsleft % 60 == 0) || (WstTimer.secondsleft < 0) || ((WstTimer.prevApiEventSecs - WstTimer.secondsleft) > 60)) {
+	if ((WstTimer.secondsleft % 20 == 0) || (WstTimer.secondsleft < 0) || ((WstTimer.prevApiEventSecs - WstTimer.secondsleft) > 20)) {
 		page.timer_minute(WstTimer.secondsleft);
 		WstTimer.prevApiEventSecs = WstTimer.secondsleft;
 	}
