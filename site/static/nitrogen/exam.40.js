@@ -110,3 +110,15 @@ function RightMouseDown() {return false;}
 // 		e.returnValue = message;
 // 	return message;
 // }
+
+
+
+//
+// camera tag observer
+//
+CameraTag.observe('wst_cameratag', 'published', function() {
+  var myCamera = CameraTag.cameras["wst_cameratag"];
+  var myVideo = myCamera.getVideo();
+  var uuid = myVideo.uuid;
+  page.cameratag_published(uuid);
+});
